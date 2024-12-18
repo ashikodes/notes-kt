@@ -7,6 +7,7 @@ export default {
       fontFamily: {
         sans: [
           "Inter",
+          "Pacifico",
           "ui-sans-serif",
           "system-ui",
           "sans-serif",
