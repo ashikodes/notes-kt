@@ -3,7 +3,7 @@ import { Form, json, Link, redirect, useActionData, useLoaderData } from "@remix
 import bcrypt from "bcryptjs";
 import { randomBytes } from "crypto";
 import { db } from "~/db.server";
-import styles from "~/styles/login.scss?url";
+import loginscss from "~/styles/login.scss?url";
 import feather from "~/assets/svg/feather.svg";
 import eye from "~/assets/svg/eye.svg";
 import google from "~/assets/svg/google.svg";
@@ -11,7 +11,7 @@ import { useState } from "react";
 import { commitSession, getSession } from "~/session.server";
 
 export const links: LinksFunction = () => [
-    { rel: "stylesheet", href: styles },
+    { rel: "stylesheet", href: loginscss }
 ];
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -21,7 +21,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     // Check if the user is logged in
     const sessionId = session.get(`${process.env.SESSION_COOKIE_NAME}`);
     if (sessionId) {
-        return redirect("/");
+        return redirect("/notes");
     }
     return {};
 }
@@ -97,7 +97,7 @@ export default function Login() {
     const actionData = useActionData<typeof action>();
     return (
         <div className="login-container">
-            <div className="login-logo">
+            <div className="notes-logo">
                 <img src={feather} alt="Feather" />
                 <span>Notes</span>
             </div>

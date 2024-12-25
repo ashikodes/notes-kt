@@ -5,7 +5,7 @@ import { db } from "~/db.server";
 import bcrypt from "bcryptjs";
 import { randomBytes } from "crypto";
 import { getSession, commitSession } from "~/session.server";
-import styles from "~/styles/register.scss?url";
+import registerscss from "~/styles/register.scss?url";
 import feather from "~/assets/svg/feather.svg";
 import eye from "~/assets/svg/eye.svg";
 import google from "~/assets/svg/google.svg";
@@ -13,7 +13,7 @@ import hint from "~/assets/svg/hint.svg";
 import { useState } from "react";
 
 export const links: LinksFunction = () => [
-    { rel: "stylesheet", href: styles },
+    { rel: "stylesheet", href: registerscss },
 ];
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -23,7 +23,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     // Check if the user is logged in
     const sessionId = session.get(`${process.env.SESSION_COOKIE_NAME}`);
     if (sessionId) {
-        return redirect("/");
+        return redirect("/notes");
     }
     return {};
 }
@@ -106,7 +106,7 @@ export default function Register() {
     const actionData = useActionData<typeof action>();
     return (
         <div className="login-container">
-            <div className="login-logo">
+            <div className="notes-logo">
                 <img src={feather} alt="Feather" />
                 <span>Notes</span>
             </div>

@@ -1,0 +1,21 @@
+body {
+  margin: 0;
+}
+
+.notes-logo {
+    display: flex;
+    padding-bottom: 0.5rem;
+    align-items: center;
+    gap: 0.625rem;
+    justify-content: center;
+  
+    span {
+      color: var(--colors-base-black, #0e121b);
+      font-family: Pacifico;
+      font-size: 1.4375rem;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      letter-spacing: -0.02875rem;
+    }
+  }
