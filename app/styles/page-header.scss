@@ -1,3 +1,12 @@
+@keyframes spin {
+  from {
+      transform: rotate(0deg);
+  }
+  to {
+      transform: rotate(360deg);
+  }
+}
+
 .page-header {
   display: flex;
   padding: var(--spacing-300, 1.5rem) var(--spacing-400, 2rem) 0.5rem;
@@ -22,6 +31,10 @@
     font-weight: 700;
     line-height: 120%; /* 1.8rem */
     letter-spacing: -0.03125rem;
+  }
+
+  .side-text {
+    color: var(--colors-neutral-600, #525866);
   }
 
   &__content {
@@ -50,6 +63,10 @@
     }
   }
 
+  .loading-icon {
+    animation: spin 1s linear infinite;
+  }
+
   .search-input {
     display: flex;
     padding: var(--spacing-150, 0.75rem) var(--spacing-200, 1rem)
@@ -72,6 +89,10 @@
     font-weight: 400;
     line-height: 130%; /* 1.1375rem */
     letter-spacing: -0.0125rem;
+
+    &:disabled {
+      background: var(--colors-neutral-50, #f5f7fa);
+    }
   }
 
   .header-settings {

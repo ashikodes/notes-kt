@@ -55,6 +55,20 @@
     gap: 0.5rem;
     align-self: stretch;
     border-radius: 0.5rem;
+  }
+
+  &__top-item .chevron,
+  &__top-item .nav-icon-active,
+  &__top-item.active .nav-icon {
+    display: none;
+  }
+
+  &__top-item.active .chevron,
+  &__top-item.active .nav-icon-active {
+    display: block;
+  }
+  
+  &__top-item.active {
     background: var(--colors-neutral-100, #f3f5f8);
   }
 

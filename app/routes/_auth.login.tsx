@@ -1,17 +1,29 @@
-import type { ActionFunctionArgs, LinksFunction, LoaderFunctionArgs } from "@remix-run/node"; // or cloudflare/deno
-import { Form, json, Link, redirect, useActionData, useLoaderData } from "@remix-run/react";
+import type {
+    ActionFunctionArgs,
+    LinksFunction,
+    LoaderFunctionArgs,
+} from "@remix-run/node"; // or cloudflare/deno
+import {
+    Form,
+    json,
+    Link,
+    redirect,
+    useActionData,
+    useLoaderData,
+} from "@remix-run/react";
 import bcrypt from "bcryptjs";
 import { randomBytes } from "crypto";
 import { db } from "~/db.server";
 import loginscss from "~/styles/login.scss?url";
 import feather from "~/assets/svg/feather.svg";
 import eye from "~/assets/svg/eye.svg";
+import hideEye from "~/assets/svg/hide-eye.svg";
 import google from "~/assets/svg/google.svg";
 import { useState } from "react";
 import { commitSession, getSession } from "~/session.server";
 
 export const links: LinksFunction = () => [
-    { rel: "stylesheet", href: loginscss }
+    { rel: "stylesheet", href: loginscss },
 ];
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -90,7 +102,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         errors.form = "Internal server error";
         return json({ errors }, { status: 500 });
     }
-}
+};
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
@@ -115,12 +127,37 @@ export default function Login() {
                         Password
                         <span className="label-link">Forgot?</span>
                     </label>
-                    <input type={showPassword ? 'text' : 'password'} id="password" name="password" required />
-                    <img onClick={() => setShowPassword(!showPassword)} src={eye} alt="Eye" className="password-eye" />
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        id="password"
+                        name="password"
+                        required
+                    />
+                    {showPassword ? (
+                        <img
+                            onClick={() => setShowPassword(!showPassword)}
+                            src={hideEye}
+                            alt="Eye"
+                            className="password-eye"
+                        />
+                    ) : (
+                        <img
+                            onClick={() => setShowPassword(!showPassword)}
+                            src={eye}
+                            alt="Eye"
+                            className="password-eye"
+                        />
+                    )}
                 </div>
 
-                <button type="submit" className="login-button">Login</button>
-                {actionData?.errors.form && <div className="text-xs self-start mt-[-12px] text-red-400">{actionData?.errors.form}</div>}
+                <button type="submit" className="login-button">
+                    Login
+                </button>
+                {actionData?.errors.form && (
+                    <div className="text-xs self-start mt-[-12px] text-red-400">
+                        {actionData?.errors.form}
+                    </div>
+                )}
             </Form>
             <div className="divider" />
             <p className="login-alt">Or log in with:</p>
@@ -129,7 +166,9 @@ export default function Login() {
                 Google
             </button>
             <div className="divider" />
-            <Link to="/register" className="no-account-link">No account yet? <span className="label-link">Sign Up</span></Link>
+            <Link to="/register" className="no-account-link">
+                No account yet? <span className="label-link">Sign Up</span>
+            </Link>
         </div>
     );
 }
