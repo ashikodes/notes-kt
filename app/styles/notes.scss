@@ -53,8 +53,7 @@
   .content-body {
     display: flex;
     flex-direction: column;
-    padding: 0.5rem var(--spacing-200, 1rem) var(--spacing-250, 1.25rem)
-      var(--spacing-400, 2rem);
+    padding: var(--spacing-200, 1rem) var(--spacing-400, 2rem);
 
     @media screen and (min-width: 62rem) {
       flex-direction: row;
@@ -108,10 +107,23 @@
     }
   }
 
+  .search-note {
+    color: var(--colors-neutral-700, #2b303b);
+    font-feature-settings: "liga" off, "clig" off;
+
+    /* sans-serif/text-preset-5 */
+    font-family: Inter;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 130%; /* 1.1375rem */
+    letter-spacing: -0.0125rem;
+    margin-bottom: 1rem;
+  }
+
   .empty-state {
     display: flex;
     padding: var(--spacing-100, 0.5rem);
-    justify-content: center;
     align-items: center;
     gap: 0.625rem;
     align-self: stretch;
@@ -128,5 +140,6 @@
     font-weight: 400;
     line-height: 130%; /* 1.1375rem */
     letter-spacing: -0.0125rem;
+    width: 100%;
   }
 }
