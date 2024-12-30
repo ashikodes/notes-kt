@@ -1,23 +1,23 @@
 import settings from "../assets/svg/settings.svg";
 import searchIcon from "../assets/svg/search.svg";
 import loading from "../assets/svg/loading.svg";
-import { Form, useSubmit } from "@remix-run/react";
+import { Form, useNavigation, useSearchParams } from "@remix-run/react";
 import { useState, useEffect, useRef } from "react";
 
 interface PageHeaderProps {
   title: string;
   search?: string;
-  searching?: boolean;
 }
 
-export default function PageHeader({
-  title,
-  search,
-  searching,
-}: PageHeaderProps) {
+export default function PageHeader({ title, search }: PageHeaderProps) {
   const [searchValue, setSearchValue] = useState(search || "");
+  const [searchParams, setSearchParams] = useSearchParams();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const submit = useSubmit();
+  const hasSearch = searchParams.has("search");
+  const navigation = useNavigation();
+  const searching =
+    navigation.location &&
+    new URLSearchParams(navigation.location.search).has("search");
 
   useEffect(() => {
     if (timeoutRef.current) {
@@ -25,9 +25,10 @@ export default function PageHeader({
     }
 
     timeoutRef.current = setTimeout(() => {
-      const form = document.querySelector(".search-form") as HTMLFormElement;
-      if (form && searchValue) {
-        submit(form);
+      if (searchValue) {
+        setSearchParams({ search: searchValue });
+      } else if (search && !searchValue) {
+        setSearchParams({});
       }
     }, 1000);
 
@@ -36,7 +37,7 @@ export default function PageHeader({
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [searchValue, submit]);
+  }, [searchValue]);
 
   useEffect(() => {
     if (!search) {
@@ -47,20 +48,24 @@ export default function PageHeader({
   return (
     <div className="page-header">
       <h2 className="page-header__text">
-        <span className="block lg:hidden mb-4">Search</span>
-        <div className="hidden lg:block">
+        {search && <span className="block lg:hidden">Search</span>}
+        <div className="">
           {search ? (
-            <>
+            <div className="hidden lg:block">
               <span className="side-text">Showing results for: </span>
               {searchValue}
-            </>
+            </div>
           ) : (
             title
           )}
         </div>
       </h2>
       <div className="page-header__content">
-        <div className="content__search">
+        <div
+          className={`content__search mt-4 lg:mt-0 ${
+            hasSearch ? "" : "hidden lg:flex"
+          }`}
+        >
           <Form className="search-form w-full flex" method="get">
             {!searching && <img src={searchIcon} alt="Search" />}
             {searching && (
