@@ -22,6 +22,8 @@ import Sidebar from "~/components/Sidebar";
 import PageHeader from "~/components/PageHeader";
 import BottomNav from "~/components/BottomNav";
 import plus from "~/assets/svg/plus.svg";
+import { useEffect, useState } from "react";
+import { AppStateContext, initialState } from "~/app.context";
 
 export const meta: MetaFunction = () => {
   return [
@@ -64,7 +66,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       },
     },
   });
-  return json({ notes, search, url: url.pathname });
+  return json({ notes, search, url: url.pathname, user_id: userSession.user_id });
 }
 
 export const links: LinksFunction = () => [
@@ -77,75 +79,86 @@ export const links: LinksFunction = () => [
 
 export default function Index() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { notes, search, url } = useLoaderData<typeof loader>();
+  const { notes, search, url, user_id } = useLoaderData<typeof loader>();
+  const [appState, setAppState] = useState(initialState);
 
   const isHome = url === "/notes";
   const isNewNote = url === "/notes/new";
   const isArchived = url === "/notes/archived";
   const isSearch = searchParams.has("search");
+
+  useEffect(() => {
+    setAppState((prevState) => ({
+      ...prevState,
+      user_id,
+    }));
+  }, [user_id]);
+  
   return (
-    <div className="notes-container">
-      <Sidebar />
-      <div className="notes-container-content">
-        <PageHeader title="All Notes" search={search} />
-        <div className="content-body">
-          <div className="content-sidebar">
-            <Link to="/notes/new" className="create-note-btn">
-              + Create New Note
-            </Link>
+    <AppStateContext.Provider value={{ appState, setAppState }}>
+      <div className="notes-container">
+        <Sidebar />
+        <div className="notes-container-content">
+          <PageHeader title="All Notes" search={search} />
+          <div className="content-body">
+            <div className="content-sidebar">
+              <Link to="/notes/new" className="create-note-btn">
+                + Create New Note
+              </Link>
 
-            {isArchived && !isSearch && (
-              <div className="archived-label mb-4">
-                All your archived notes are stored here. You can restore or
-                delete them anytime.
-              </div>
-            )}
+              {isArchived && !isSearch && (
+                <div className="archived-label mb-4">
+                  All your archived notes are stored here. You can restore or
+                  delete them anytime.
+                </div>
+              )}
 
-            {/* untitled note */}
-            {isNewNote && <div className="untitled-note">Untitled Note</div>}
+              {/* untitled note */}
+              {isNewNote && <div className="untitled-note">Untitled Note</div>}
 
-            {/* If no notes */}
-            {search ? (
-              <div className="flex flex-col">
-                <span className="block lg:hidden search-note mb-4">
-                  {isArchived ? "Archived" : "All"} notes matching "{search}"
-                  are displayed below.
-                </span>
-                {!notes.length && (isHome || isArchived) && (
-                  <div className="empty-state">
-                    No notes match your search. Try a different keyword or
-                    create a new note.
-                  </div>
-                )}
-              </div>
-            ) : (
-              <>
-                {!notes.length && isHome && (
-                  <div className="empty-state">
-                    You don't have any notes yet. Start a new note to capture
-                    your thoughts and ideas.
-                  </div>
-                )}
-                {!notes.length && isArchived && (
-                  <div className="empty-state">
-                    No notes have been archived yet. Move notes here for
-                    safekeeping, or create a new note.
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-          <div className="main-content">
-            <Outlet />
+              {/* If no notes */}
+              {search ? (
+                <div className="flex flex-col">
+                  <span className="block lg:hidden search-note mb-4">
+                    {isArchived ? "Archived" : "All"} notes matching "{search}"
+                    are displayed below.
+                  </span>
+                  {!notes.length && (isHome || isArchived) && (
+                    <div className="empty-state">
+                      No notes match your search. Try a different keyword or
+                      create a new note.
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <>
+                  {!notes.length && isHome && (
+                    <div className="empty-state">
+                      You don't have any notes yet. Start a new note to capture
+                      your thoughts and ideas.
+                    </div>
+                  )}
+                  {!notes.length && isArchived && (
+                    <div className="empty-state">
+                      No notes have been archived yet. Move notes here for
+                      safekeeping, or create a new note.
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+            <div className="main-content">
+              <Outlet />
+            </div>
           </div>
         </div>
+        <BottomNav />
+        <div className="floating-create">
+          <button className="floating-btn">
+            <img src={plus} alt="Plus" />
+          </button>
+        </div>
       </div>
-      <BottomNav />
-      <div className="floating-create">
-        <button className="floating-btn">
-          <img src={plus} alt="Plus" />
-        </button>
-      </div>
-    </div>
+    </AppStateContext.Provider>
   );
 }
