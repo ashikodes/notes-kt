@@ -13,8 +13,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const user_id = body.get("user_id");
   const title = body.get("title");
   const content = body.get("content");
-  const tags = body.get("tags");
-  if (!title || !content || !tags) {
+  const tags = body.get("tags") || '';
+  if (!title || !content) {
     return { error: "Title, content, and tags are required." };
   }
 
@@ -30,11 +30,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       const newNote = await tx.notes.create({
         data: {
           id: randomUUID(),
-          user_id: user_id as string,
           title: title as string,
           content: content as string,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
+          Users: {
+            connect: { id: user_id as string },
+          },
         },
       });
 
@@ -98,7 +100,6 @@ export default function NewNote() {
                 className="tag-input"
                 name="tags"
                 placeholder="Add tags separated by commas (e.g. Work, Planning)"
-                required
               />
             </div>
             <div className="note-prop">
