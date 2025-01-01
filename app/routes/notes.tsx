@@ -22,7 +22,7 @@ import Sidebar from "~/components/Sidebar";
 import PageHeader from "~/components/PageHeader";
 import BottomNav from "~/components/BottomNav";
 import plus from "~/assets/svg/plus.svg";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AppStateContext, initialState } from "~/app.context";
 
 export const meta: MetaFunction = () => {
@@ -65,8 +65,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
         contains: search,
       },
     },
+    include: {
+      Tags: true,
+    },
   });
-  return json({ notes, search, url: url.pathname, user_id: userSession.user_id });
+  return json({
+    notes,
+    search,
+    url: url.pathname,
+    user_id: userSession.user_id,
+  });
 }
 
 export const links: LinksFunction = () => [
@@ -93,7 +101,7 @@ export default function Index() {
       user_id,
     }));
   }, [user_id]);
-  
+
   return (
     <AppStateContext.Provider value={{ appState, setAppState }}>
       <div className="notes-container">
@@ -146,6 +154,29 @@ export default function Index() {
                   )}
                 </>
               )}
+              {notes.map((note, idx) => (
+                <React.Fragment key={note.id}>
+                  {idx != 0 && <div className="divider" />}
+                  <Link to={`/notes/${note.id}`} className="note-list">
+                    <div className="list-title">{note.title}</div>
+                    <div className="tag-list">
+                      {note.Tags.map((tag) => (
+                        <span key={tag.id} className="tag">
+                          {tag.name}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="list-date">
+                      {new Intl.DateTimeFormat("en-GB", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                        timeZone: "UTC",
+                      }).format(new Date(`${note.updated_at}`))}
+                    </div>
+                  </Link>
+                </React.Fragment>
+              ))}
             </div>
             <div className="main-content">
               <Outlet />

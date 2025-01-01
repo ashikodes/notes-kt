@@ -13,7 +13,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const user_id = body.get("user_id");
   const title = body.get("title");
   const content = body.get("content");
-  const tags = body.get("tags") || '';
+  const tags = body.get("tags") || "";
   if (!title || !content) {
     return { error: "Title, content, and tags are required." };
   }
@@ -111,20 +111,20 @@ export default function NewNote() {
             </div>
           </div>
           <div className="divider" />
-          {preview ? (
+          {preview && (
             <div className="note-content">
               <ReactMarkdown>{markdown}</ReactMarkdown>
             </div>
-          ) : (
-            <textarea
-              className="note-content"
-              name="content"
-              placeholder="Write your markdown here..."
-              value={markdown}
-              onChange={(e) => setMarkdown(e.target.value)}
-              required
-            />
           )}
+          <textarea
+            className={`note-content ${preview ? "hidden" : ""}`}
+            name="content"
+            placeholder="Write your markdown here..."
+            value={markdown}
+            onChange={(e) => setMarkdown(e.target.value)}
+            required
+          />
+
           <div className="divider" />
           <div className="form-footer">
             <button type="submit" className="form-btn primary">
