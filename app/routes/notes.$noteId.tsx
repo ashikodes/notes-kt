@@ -1,14 +1,32 @@
-import { ActionFunctionArgs, LinksFunction, redirect } from "@remix-run/node";
-import { db } from "~/db.server";
+import {
+  json,
+  LinksFunction,
+  LoaderFunctionArgs,
+} from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import { randomUUID } from "node:crypto";
-import NoteForm from "~/components/NoteForm";
-import noteformscss from "~/styles/note-form.scss?url";
 import { useContext, useEffect } from "react";
 import { AppContextType, AppStateContext } from "~/app.context";
+import NoteForm from "~/components/NoteForm";
+import { db } from "~/db.server";
+import noteformscss from "~/styles/note-form.scss?url";
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: noteformscss },
+];
+
+export const loader = async ({ params }: LoaderFunctionArgs) => {
+  const noteId = params.noteId;
+  const note = await db.notes.findUnique({
+    where: { id: noteId },
+    include: { Tags: true },
+  });
+  return json({ note });
+};
+
+export const action = async ({ request, params }: LoaderFunctionArgs) => {
   const body = await request.formData();
-  const user_id = body.get("user_id");
+  const noteId = params.noteId;
   const title = body.get("title");
   const content = body.get("content");
   const tags = body.get("tags") || "";
@@ -24,17 +42,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   try {
     // Start a transaction to handle note and tags creation
-    const newNote = await db.$transaction(async (tx) => {
-      const newNote = await tx.notes.create({
+    const updatedNote = await db.$transaction(async (tx) => {
+      const updatedNote = await tx.notes.update({
+        where: { id: noteId as string },
         data: {
-          id: randomUUID(),
           title: title as string,
           content: content as string,
-          created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
-          Users: {
-            connect: { id: user_id as string },
-          },
         },
       });
 
@@ -54,36 +68,31 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
       // Step 3: Connect tags to the note
       await tx.notes.update({
-        where: { id: newNote.id },
+        where: { id: updatedNote.id },
         data: {
           Tags: {
-            connect: tagRecords.map((tag) => ({ id: tag.id })),
+            set: tagRecords.map((tag) => ({ id: tag.id })),
           },
         },
       });
 
-      return newNote;
+      return updatedNote;
     });
-
-    return redirect(`/notes/${newNote.id}`);
+    return json({ note: updatedNote });
   } catch (error) {
-    console.error("Error creating note:", error);
-    return { error: "Failed to create note. Please try again." };
+    return json({ error: error }, { status: 500 });
   }
 };
 
-export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: noteformscss },
-]
-
-export default function NewNote() {
+export default function Note() {
+  const { note } = useLoaderData<typeof loader>();
   const { setAppState } = useContext(AppStateContext);
   useEffect(() => {
     setAppState((prevState) => ({
       ...prevState,
-      note: {} as AppContextType['appState']['note'],
+      note: note as AppContextType["appState"]["note"],
     }));
-  }, []);
+  }, [note]);
   return (
     <>
       <NoteForm />

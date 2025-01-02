@@ -10,37 +10,6 @@
     flex-direction: row;
     min-height: 100%;
   }
-
-  .floating-create {
-    position: absolute;
-    bottom: 5rem;
-    right: 2rem;
-
-    @media screen and (min-width: 48rem) {
-      bottom: 7rem;
-    }
-
-    @media screen and (min-width: 62rem) {
-      display: none;
-    }
-  }
-
-  .floating-btn {
-    display: flex;
-    width: 3rem;
-    height: 3rem;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
-    border-radius: var(--corner-radius-full, 62.4375rem);
-    background: var(--colors-blue-500, #335cff);
-    box-shadow: 0px 7px 11px 0px rgba(202, 207, 216, 0.7);
-
-    @media screen and (min-width: 48rem) {
-      width: 4rem;
-      height: 4rem;
-    }
-  }
 }
 
 .notes-container-content {
@@ -180,6 +149,11 @@
     gap: var(--spacing-150, 0.75rem);
     align-self: stretch;
 
+    &.active {
+      border-radius: var(--spacing-075, 0.375rem);
+      background: var(--colors-neutral-100, #f3f5f8);
+    }
+
     .list-title {
       color: var(--colors-neutral-950, #0e121b);
       font-feature-settings: "liga" off, "clig" off;
@@ -234,166 +208,5 @@
       line-height: 120%; /* 0.9rem */
       letter-spacing: -0.0125rem;
     }
-  }
-}
-
-// Note form container
-.note-form-container {
-  flex-grow: 1;
-  flex-shrink: 0;
-}
-
-.note-sidebar {
-  width: 18.125rem;
-}
-
-.note-form {
-  display: flex;
-  padding: var(--spacing-250, 1.25rem) var(--spacing-300, 1.5rem);
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--spacing-200, 1rem);
-  border-right: 1px solid var(--colors-neutral-200, #e0e4ea);
-  height: 100%;
-
-  .note-title {
-    color: var(--colors-neutral-950, #0e121b);
-    font-feature-settings: "liga" off, "clig" off;
-
-    /* sans-serif/text-preset-1 */
-    font-family: Inter;
-    font-size: 1.5rem;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 120%; /* 1.8rem */
-    letter-spacing: -0.03125rem;
-    width: 100%;
-    outline: none;
-  }
-
-  .note-properties {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-    align-self: stretch;
-  }
-
-  .note-prop {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-100, 0.5rem);
-    align-self: stretch;
-  }
-
-  .tag-icon {
-    width: 1rem;
-    height: 1rem;
-  }
-
-  .tag-label-icon {
-    display: flex;
-    width: 7.1875rem;
-    padding: 0.25rem 0rem;
-    align-items: center;
-    gap: var(--spacing-075, 0.375rem);
-    border-radius: 2.25rem;
-  }
-
-  .tag-label {
-    color: var(--colors-neutral-700, #2b303b);
-    font-feature-settings: "liga" off, "clig" off;
-
-    /* sans-serif/text-preset-5 */
-    font-family: Inter;
-    font-size: 0.875rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 130%; /* 1.1375rem */
-    letter-spacing: -0.0125rem;
-  }
-
-  .tag-input,
-  .prop-value {
-    display: flex;
-    padding: var(--spacing-0, 0rem);
-    align-items: center;
-    gap: var(--spacing-100, 0.5rem);
-    flex: 1 0 0;
-    border-radius: var(--corner-radius-4, 0.25rem);
-    font-feature-settings: "liga" off, "clig" off;
-
-    /* sans-serif/text-preset-5 */
-    font-family: Inter;
-    font-size: 0.875rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 130%; /* 1.1375rem */
-    letter-spacing: -0.0125rem;
-    outline: none;
-  }
-
-  .prop-value {
-    color: var(--colors-neutral-400, #99a0ae);
-  }
-
-  .divider {
-    height: 0.0625rem;
-    flex-shrink: 0;
-    align-self: stretch;
-    background: var(--colors-neutral-200, #e0e4ea);
-  }
-
-  .note-content {
-    color: var(--colors-neutral-700, #2b303b);
-    font-feature-settings: "liga" off, "clig" off;
-
-    /* sans-serif/text-preset-5 */
-    font-family: Inter;
-    font-size: 0.875rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 130%; /* 1.1375rem */
-    letter-spacing: -0.0125rem;
-    flex: 1 0 0;
-    align-self: stretch;
-    resize: none;
-    outline: none;
-  }
-
-  .form-footer {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-200, 1rem);
-    align-self: stretch;
-  }
-
-  .form-btn {
-    display: flex;
-    padding: var(--spacing-150, 0.75rem) var(--spacing-200, 1rem);
-    justify-content: center;
-    align-items: center;
-    gap: var(--spacing-100, 0.5rem);
-    border-radius: var(--corner-radius-8, 0.5rem);
-
-    font-feature-settings: "liga" off, "clig" off;
-
-    /* sans-serif/text-preset-4 */
-    font-family: Inter;
-    font-size: 0.875rem;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 120%; /* 1.05rem */
-    letter-spacing: -0.0125rem;
-  }
-
-  button.primary {
-    background: var(--colors-blue-500, #335cff);
-    color: #fff;
-  }
-
-  button.secondary {
-    background: var(--colors-neutral-100, #f3f5f8);
-    color: var(--colors-neutral-600, #525866);
   }
 }

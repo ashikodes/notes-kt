@@ -17,11 +17,11 @@ import {
   Outlet,
   Link,
   useSearchParams,
+  NavLink,
 } from "@remix-run/react";
 import Sidebar from "~/components/Sidebar";
 import PageHeader from "~/components/PageHeader";
 import BottomNav from "~/components/BottomNav";
-import plus from "~/assets/svg/plus.svg";
 import React, { useEffect, useState } from "react";
 import { AppStateContext, initialState } from "~/app.context";
 
@@ -67,6 +67,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
     },
     include: {
       Tags: true,
+    },
+    orderBy: {
+      updated_at: "desc",
     },
   });
   return json({
@@ -157,7 +160,7 @@ export default function Index() {
               {notes.map((note, idx) => (
                 <React.Fragment key={note.id}>
                   {idx != 0 && <div className="divider" />}
-                  <Link to={`/notes/${note.id}`} className="note-list">
+                  <NavLink to={`/notes/${note.id}`} className="note-list">
                     <div className="list-title">{note.title}</div>
                     <div className="tag-list">
                       {note.Tags.map((tag) => (
@@ -174,7 +177,7 @@ export default function Index() {
                         timeZone: "UTC",
                       }).format(new Date(`${note.updated_at}`))}
                     </div>
-                  </Link>
+                  </NavLink>
                 </React.Fragment>
               ))}
             </div>
@@ -184,11 +187,6 @@ export default function Index() {
           </div>
         </div>
         <BottomNav />
-        <div className="floating-create">
-          <button className="floating-btn">
-            <img src={plus} alt="Plus" />
-          </button>
-        </div>
       </div>
     </AppStateContext.Provider>
   );

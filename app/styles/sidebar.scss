@@ -9,6 +9,7 @@
   border-right: 1px solid var(--colors-neutral-200, #e0e4ea);
 
   @media screen and (min-width: 62rem) {
+    min-height: 100vh;
     height: auto;
     width: 17rem;
     background-color: #fff;

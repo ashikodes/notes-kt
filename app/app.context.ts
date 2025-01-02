@@ -1,9 +1,18 @@
-import { createContext } from "react";
+import React, { createContext } from "react";
+import { Prisma } from "@prisma/client";
 
 
 export const initialState = {
   user_id: "",
   search: "",
+  note: {} as Prisma.NotesUncheckedCreateInput & {
+    Tags: Prisma.TagCreateInput[];
+  },
 };
 
-export const AppStateContext = createContext({ appState: initialState, setAppState: (state: typeof initialState) => {} });
+export type AppContextType = {
+  appState: typeof initialState;
+  setAppState: React.Dispatch<React.SetStateAction<typeof initialState>>;
+};
+
+export const AppStateContext = createContext({} as AppContextType); 

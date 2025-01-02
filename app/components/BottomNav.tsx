@@ -4,6 +4,7 @@ import search from "~/assets/svg/search.svg";
 import searchActive from "~/assets/svg/search-active.svg";
 import archived from "~/assets/svg/archived.svg";
 import archivedActive from "~/assets/svg/archived-active.svg";
+import plus from "~/assets/svg/plus.svg";
 import tags from "~/assets/svg/tags.svg";
 import settings from "~/assets/svg/settings.svg";
 import { NavLink, useSearchParams } from "@remix-run/react";
@@ -48,6 +49,11 @@ export default function BottomNav() {
           <span className="nav-text">Settings</span>
         </div>
       </div>
+      <div className="floating-create">
+          <button className="floating-btn">
+            <img src={plus} alt="Plus" />
+          </button>
+        </div>
     </div>
   );
 }

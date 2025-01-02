@@ -14,6 +14,37 @@
   @media screen and (min-width: 62rem) {
     display: none;
   }
+
+  .floating-create {
+    position: absolute;
+    bottom: 5rem;
+    right: 2rem;
+
+    @media screen and (min-width: 48rem) {
+      bottom: 7rem;
+    }
+
+    @media screen and (min-width: 62rem) {
+      display: none;
+    }
+  }
+
+  .floating-btn {
+    display: flex;
+    width: 3rem;
+    height: 3rem;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: var(--corner-radius-full, 62.4375rem);
+    background: var(--colors-blue-500, #335cff);
+    box-shadow: 0px 7px 11px 0px rgba(202, 207, 216, 0.7);
+
+    @media screen and (min-width: 48rem) {
+      width: 4rem;
+      height: 4rem;
+    }
+  }
 }
 
 .bottom-nav {
@@ -24,7 +55,7 @@
 
   .menu-item {
     display: flex;
-    width: var(--spacing-1000, 5rem);
+    width: 3rem;
     padding: var(--spacing-050, 0.25rem);
     margin-right: var(--spacing-050, 0.25rem);
     flex-direction: column;
@@ -46,6 +77,7 @@
     letter-spacing: -0.0125rem;
 
     @media screen and (min-width: 48rem) {
+      width: var(--spacing-1000, 5rem);
       margin-right: 0;
     }
 
