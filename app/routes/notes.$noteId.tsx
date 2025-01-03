@@ -1,8 +1,4 @@
-import {
-  json,
-  LinksFunction,
-  LoaderFunctionArgs,
-} from "@remix-run/node";
+import { json, LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { randomUUID } from "node:crypto";
 import { useContext, useEffect } from "react";
@@ -10,6 +6,8 @@ import { AppContextType, AppStateContext } from "~/app.context";
 import NoteForm from "~/components/NoteForm";
 import { db } from "~/db.server";
 import noteformscss from "~/styles/note-form.scss?url";
+import archive from "~/assets/svg/archived.svg";
+import thrash from "~/assets/svg/thrash.svg";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: noteformscss },
@@ -96,7 +94,16 @@ export default function Note() {
   return (
     <>
       <NoteForm />
-      <div className="note-sidebar" />
+      <div className="note-sidebar">
+        <button className="note-sidebar-btn">
+          <img src={archive} alt="Archive" />
+          Archive Note
+        </button>
+        <button className="note-sidebar-btn">
+          <img src={thrash} alt="Delete" />  
+          Delete Note
+        </button>
+      </div>
     </>
   );
 }

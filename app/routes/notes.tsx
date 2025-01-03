@@ -58,12 +58,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   // fetch all notes
   const url = new URL(request.url);
+  const isArchived = url.pathname === "/notes/archived" ? true : null;
   const search = url.searchParams.get("search") || "";
   const notes = await db.notes.findMany({
     where: {
       title: {
         contains: search,
       },
+      archived: isArchived,
     },
     include: {
       Tags: true,
@@ -110,7 +112,7 @@ export default function Index() {
       <div className="notes-container">
         <Sidebar />
         <div className="notes-container-content">
-          <PageHeader title="All Notes" search={search} />
+          <PageHeader title="All Notes" search={search} url={url} />
           <div className="content-body">
             <div className="content-sidebar">
               <Link to="/notes/new" className="create-note-btn">
@@ -123,9 +125,6 @@ export default function Index() {
                   delete them anytime.
                 </div>
               )}
-
-              {/* untitled note */}
-              {isNewNote && <div className="untitled-note">Untitled Note</div>}
 
               {/* If no notes */}
               {search ? (
@@ -157,29 +156,39 @@ export default function Index() {
                   )}
                 </>
               )}
-              {notes.map((note, idx) => (
-                <React.Fragment key={note.id}>
-                  {idx != 0 && <div className="divider" />}
-                  <NavLink to={`/notes/${note.id}`} className="note-list">
-                    <div className="list-title">{note.title}</div>
-                    <div className="tag-list">
-                      {note.Tags.map((tag) => (
-                        <span key={tag.id} className="tag">
-                          {tag.name}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="list-date">
-                      {new Intl.DateTimeFormat("en-GB", {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric",
-                        timeZone: "UTC",
-                      }).format(new Date(`${note.updated_at}`))}
-                    </div>
-                  </NavLink>
-                </React.Fragment>
-              ))}
+              <div className={`note-list-container ${isHome ? 'home' : 'other'}`}>
+                {isNewNote && (
+                  <div className="untitled-note">Untitled Note</div>
+                )}
+                {notes.map((note, idx) => (
+                  <React.Fragment key={note.id}>
+                    {idx != 0 && <div className="divider" />}
+                    <NavLink
+                      to={`/notes/${note.id}${
+                        isSearch ? "?search=" + search : ""
+                      }`}
+                      className="note-list"
+                    >
+                      <div className="list-title">{note.title}</div>
+                      <div className="tag-list">
+                        {note.Tags.map((tag) => (
+                          <span key={tag.id} className="tag">
+                            {tag.name}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="list-date">
+                        {new Intl.DateTimeFormat("en-GB", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                          timeZone: "UTC",
+                        }).format(new Date(`${note.updated_at}`))}
+                      </div>
+                    </NavLink>
+                  </React.Fragment>
+                ))}
+              </div>
             </div>
             <div className="main-content">
               <Outlet />

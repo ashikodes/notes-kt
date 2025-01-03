@@ -7,9 +7,10 @@ import { useState, useEffect, useRef } from "react";
 interface PageHeaderProps {
   title: string;
   search?: string;
+  url: string;
 }
 
-export default function PageHeader({ title, search }: PageHeaderProps) {
+export default function PageHeader({ title, search, url }: PageHeaderProps) {
   const [searchValue, setSearchValue] = useState(search || "");
   const [searchParams, setSearchParams] = useSearchParams();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -18,6 +19,8 @@ export default function PageHeader({ title, search }: PageHeaderProps) {
   const searching =
     navigation.location &&
     new URLSearchParams(navigation.location.search).has("search");
+
+  const isHome = url === "/notes";
 
   useEffect(() => {
     if (timeoutRef.current) {
@@ -46,7 +49,7 @@ export default function PageHeader({ title, search }: PageHeaderProps) {
   }, [search]);
 
   return (
-    <div className="page-header">
+    <div className={`page-header ${isHome ? 'home' : 'other'}`}>
       <h2 className="page-header__text">
         {search && <span className="block lg:hidden">Search</span>}
         <div className="">

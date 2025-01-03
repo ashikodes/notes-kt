@@ -20,6 +20,10 @@
     bottom: 5rem;
     right: 2rem;
 
+    &.active {
+      display: none;
+    }
+
     @media screen and (min-width: 48rem) {
       bottom: 7rem;
     }

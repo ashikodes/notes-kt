@@ -12,6 +12,10 @@
   padding: var(--spacing-300, 1.5rem) var(--spacing-400, 2rem) 0.5rem;
   flex-direction: column;
 
+  &.other {
+    display: none;
+  }
+
   @media screen and (min-width: 62rem) {
     height: 5.0625rem;
     padding: 0rem var(--spacing-400, 2rem);
@@ -20,6 +24,10 @@
     flex-shrink: 0;
     border-bottom: 1px solid var(--colors-neutral-200, #e0e4ea);
     flex-direction: row;
+
+    &.other {
+      display: flex;
+    }
   }
 
   &__text {

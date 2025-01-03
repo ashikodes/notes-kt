@@ -1,10 +1,10 @@
-import { Form } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 import { useContext, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { AppContextType, AppStateContext } from "~/app.context";
 import tag from "~/assets/svg/tags.svg";
 import clock from "~/assets/svg/clock.svg";
-import { Prisma } from "@prisma/client";
+import chevronLeft from "~/assets/svg/chevron-left.svg";
 
 export default function NoteForm() {
   const [markdown, setMarkdown] = useState<string>("");
@@ -19,6 +19,28 @@ export default function NoteForm() {
   return (
     <div className="note-form-container">
       <Form method="post" className="note-form">
+        <div className="form-header">
+          <Link to="/notes" className="back-btn">
+            <img src={chevronLeft} alt="Back" />
+            Back
+          </Link>
+          <div className="right-control">
+            <button
+              onClick={() => setPreview(!preview)}
+              type="button"
+              className="form-header-btn"
+            >
+              {markdown && !preview ? "Preview" : ""}
+              {preview && markdown ? "Edit" : ""}
+            </button>
+            <Link to="/notes" className="form-header-btn cancel">
+              Cancel
+            </Link>
+            <button type="submit" className="form-header-btn save">
+              Save Note
+            </button>
+          </div>
+        </div>
         <input type="hidden" value={appState.user_id} name="user_id" />
         <input
           type="text"
@@ -72,23 +94,24 @@ export default function NoteForm() {
           onChange={(e) => setMarkdown(e.target.value)}
           required
         />
-
-        <div className="divider" />
         <div className="form-footer">
-          <button type="submit" className="form-btn primary">
-            Save Note
-          </button>
-          <button type="button" className="form-btn secondary">
-            Cancel
-          </button>
-          <button
-            onClick={() => setPreview(!preview)}
-            type="button"
-            className="form-btn alternate"
-          >
-            {markdown && !preview ? "Preview" : ""}
-            {preview && markdown ? "Edit" : ""}
-          </button>
+          <div className="divider" />
+          <div className="form-action-footer">
+            <button type="submit" className="form-btn primary">
+              Save Note
+            </button>
+            <Link to="/notes" className="form-btn secondary">
+              Cancel
+            </Link>
+            <button
+              onClick={() => setPreview(!preview)}
+              type="button"
+              className="form-btn alternate"
+            >
+              {markdown && !preview ? "Preview" : ""}
+              {preview && markdown ? "Edit" : ""}
+            </button>
+          </div>
         </div>
       </Form>
     </div>

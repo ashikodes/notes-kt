@@ -35,7 +35,11 @@ export default function BottomNav() {
         <div className="divider" />
         <NavLink to="/notes/archived" className="menu-item">
           <img src={archived} className="menu-icon" alt="Archived" />
-          <img src={archivedActive} className="menu-icon-active" alt="Archived" />
+          <img
+            src={archivedActive}
+            className="menu-icon-active"
+            alt="Archived"
+          />
           <span className="nav-text">Archived</span>
         </NavLink>
         <div className="divider" />
@@ -49,11 +53,11 @@ export default function BottomNav() {
           <span className="nav-text">Settings</span>
         </div>
       </div>
-      <div className="floating-create">
-          <button className="floating-btn">
-            <img src={plus} alt="Plus" />
-          </button>
-        </div>
+      <NavLink to="/notes/new" className="floating-create">
+        <button className="floating-btn">
+          <img src={plus} alt="Plus" />
+        </button>
+      </NavLink>
     </div>
   );
 }
