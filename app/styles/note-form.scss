@@ -256,12 +256,12 @@
     letter-spacing: -0.0125rem;
   }
 
-  button.primary {
+  .form-btn.primary {
     background: var(--colors-blue-500, #335cff);
     color: #fff;
   }
 
-  button.secondary {
+  .form-btn.secondary {
     background: var(--colors-neutral-100, #f3f5f8);
     color: var(--colors-neutral-600, #525866);
   }

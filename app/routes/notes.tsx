@@ -24,6 +24,7 @@ import PageHeader from "~/components/PageHeader";
 import BottomNav from "~/components/BottomNav";
 import React, { useEffect, useState } from "react";
 import { AppStateContext, initialState } from "~/app.context";
+import ArchiveModal from "~/components/Modal/ArchiveModal";
 
 export const meta: MetaFunction = () => {
   return [
@@ -156,7 +157,9 @@ export default function Index() {
                   )}
                 </>
               )}
-              <div className={`note-list-container ${isHome ? 'home' : 'other'}`}>
+              <div
+                className={`note-list-container ${isHome ? "home" : "other"}`}
+              >
                 {isNewNote && (
                   <div className="untitled-note">Untitled Note</div>
                 )}
@@ -196,6 +199,7 @@ export default function Index() {
           </div>
         </div>
         <BottomNav />
+        {appState.modal === "archive" && <ArchiveModal />}
       </div>
     </AppStateContext.Provider>
   );

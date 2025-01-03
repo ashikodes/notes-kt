@@ -6,11 +6,13 @@ import { AppContextType, AppStateContext } from "~/app.context";
 import NoteForm from "~/components/NoteForm";
 import { db } from "~/db.server";
 import noteformscss from "~/styles/note-form.scss?url";
+import modalscss from "~/styles/modal.scss?url";
 import archive from "~/assets/svg/archived.svg";
 import thrash from "~/assets/svg/thrash.svg";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: noteformscss },
+  { rel: "stylesheet", href: modalscss },
 ];
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {

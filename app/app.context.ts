@@ -5,6 +5,7 @@ import { Prisma } from "@prisma/client";
 export const initialState = {
   user_id: "",
   search: "",
+  modal: "" as "archive" | "delete" | "",
   note: {} as Prisma.NotesUncheckedCreateInput & {
     Tags: Prisma.TagCreateInput[];
   },
@@ -15,4 +16,4 @@ export type AppContextType = {
   setAppState: React.Dispatch<React.SetStateAction<typeof initialState>>;
 };
 
-export const AppStateContext = createContext({} as AppContextType); 
+export const AppStateContext = createContext({} as AppContextType);
