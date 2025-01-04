@@ -21,6 +21,7 @@ export default function PageHeader({ title, search, url }: PageHeaderProps) {
     new URLSearchParams(navigation.location.search).has("search");
 
   const isHome = url === "/notes";
+  const isArchivedHome = url === "/notes/archived";
 
   useEffect(() => {
     if (timeoutRef.current) {
@@ -49,7 +50,7 @@ export default function PageHeader({ title, search, url }: PageHeaderProps) {
   }, [search]);
 
   return (
-    <div className={`page-header ${isHome ? 'home' : 'other'}`}>
+    <div className={`page-header ${(isHome || isArchivedHome) ? 'home' : 'other'}`}>
       <h2 className="page-header__text">
         {search && <span className="block lg:hidden">Search</span>}
         <div className="">

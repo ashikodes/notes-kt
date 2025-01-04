@@ -14,7 +14,7 @@ const toastConfig = {
         link: "",
     },
     deleted: {
-        text: "Note deleted.",
+        text: "Note permanently deleted.",
         link: "",
     },
     updated: {

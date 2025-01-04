@@ -1,4 +1,4 @@
-import { Form, useParams } from "@remix-run/react";
+import { Form, useLocation, useParams } from "@remix-run/react";
 import { useContext } from "react";
 import { AppStateContext } from "~/app.context";
 import archive from "~/assets/svg/archived.svg";
@@ -23,9 +23,12 @@ const modalConfig = {
 
 export default function Modal() {
   const params = useParams();
+  const location = useLocation();
   const { appState, setAppState } = useContext(AppStateContext);
   const { modal } = appState;
   if (!modal) return null;
+  const url = location.pathname;
+  const isArchivedUrl = url.includes("/notes/archived");
   const { title, sub, primary, imgSrc, method } = modalConfig[modal];
   const closeModal = () => setAppState((state) => ({ ...state, modal: "" }));
   return (
@@ -48,7 +51,7 @@ export default function Modal() {
           <div className="divider" />
           <div className="content-bottom">
             <button onClick={closeModal} className="modal-btn secondary">Cancel</button>
-            <Form action={`/notes/${params.noteId}`} method={method}>
+            <Form action={`/notes/${isArchivedUrl ? 'archived/' : ''}${params.noteId}`} method={method}>
               <button className={`modal-btn primary ${method}`}>{primary}</button>
             </Form>
           </div>

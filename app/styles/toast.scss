@@ -9,7 +9,7 @@
 
 .note-toast {
   display: flex;
-  width: 24.375rem;
+  width: 90%;
   height: 2rem;
   padding: var(--spacing-100, 0.5rem);
   align-items: center;
@@ -20,11 +20,15 @@
   background: #fff;
   box-shadow: 0px 16px 32px -12px rgba(14, 18, 27, 0.1);
   position: fixed;
-  right: 3rem;
+  right: 1rem;
   bottom: 4rem;
-
   // animation slide in
   animation: slideIn 0.3s ease-in-out forwards;
+
+  @media screen and (min-width: 48rem) {
+    width: 24.375rem;
+    right: 3rem;
+  }
 
   .toast-text {
     color: var(--colors-neutral-950, #0e121b);

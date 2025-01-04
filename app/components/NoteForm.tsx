@@ -1,4 +1,4 @@
-import { Form, Link } from "@remix-run/react";
+import { Form, Link, useLocation } from "@remix-run/react";
 import { useContext, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { AppContextType, AppStateContext } from "~/app.context";
@@ -7,13 +7,15 @@ import clock from "~/assets/svg/clock.svg";
 import archiveIcon from "~/assets/svg/archived.svg";
 import deleteIcon from "~/assets/svg/thrash.svg";
 import chevronLeft from "~/assets/svg/chevron-left.svg";
+import refreshLeft from "~/assets/svg/refresh-left.svg";
 
 export default function NoteForm() {
+  const location = useLocation();
   const [markdown, setMarkdown] = useState<string>("");
   const [preview, setPreview] = useState<boolean>(false);
   const [details, setDetails] = useState<AppContextType["appState"]["note"]>();
   const { appState, setAppState } = useContext(AppStateContext);
-
+  const isArchived = location.pathname.includes("/notes/archived");
   useEffect(() => {
     setDetails(appState.note);
     setMarkdown(appState.note.content ?? "");
@@ -27,23 +29,45 @@ export default function NoteForm() {
   };
   return (
     <div className="note-form-container">
-      <Form method="post" className="note-form">
-        <div className="form-header">
-          <Link to="/notes" className="back-btn">
-            <img src={chevronLeft} alt="Back" />
-            Back
+      <div className="form-header">
+        <Link
+          to={isArchived ? "/notes/archived" : "/notes"}
+          className="back-btn"
+        >
+          <img src={chevronLeft} alt="Back" />
+          Back
+        </Link>
+        <div className="right-control">
+          <img
+            onClick={() => showModal("delete")}
+            src={deleteIcon}
+            alt="Delete"
+          />
+          {isArchived ? (
+            <Form method="patch" className="restore-btn-form">
+              <button type="submit" className="restore-btn">
+                <img src={refreshLeft} alt="Restore" />
+              </button>
+            </Form>
+          ) : (
+            <img
+              onClick={() => showModal("archive")}
+              src={archiveIcon}
+              alt="Archive"
+            />
+          )}
+          <Link
+            to={isArchived ? "/notes/archived" : "/notes"}
+            className="form-header-btn cancel"
+          >
+            Cancel
           </Link>
-          <div className="right-control">
-            <img onClick={() => showModal("archive")} src={archiveIcon} alt="Archive" />
-            <img onClick={() => showModal("delete")} src={deleteIcon} alt="Delete" />
-            <Link to="/notes" className="form-header-btn cancel">
-              Cancel
-            </Link>
-            <button type="submit" className="form-header-btn save">
-              Save Note
-            </button>
-          </div>
+          <button type="submit" className="form-header-btn save">
+            Save Note
+          </button>
         </div>
+      </div>
+      <Form method="post" className="note-form">
         <input type="hidden" value={appState.user_id} name="user_id" />
         <input
           type="text"
@@ -112,7 +136,10 @@ export default function NoteForm() {
             <button type="submit" className="form-btn primary">
               Save Note
             </button>
-            <Link to="/notes" className="form-btn secondary">
+            <Link
+              to={isArchived ? "/notes/archived" : "/notes"}
+              className="form-btn secondary"
+            >
               Cancel
             </Link>
             <button

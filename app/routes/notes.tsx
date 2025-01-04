@@ -20,6 +20,8 @@ import {
   Link,
   useSearchParams,
   NavLink,
+  useNavigation,
+  useLocation,
 } from "@remix-run/react";
 import Sidebar from "~/components/Sidebar";
 import PageHeader from "~/components/PageHeader";
@@ -62,7 +64,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   // fetch all notes
   const url = new URL(request.url);
-  const isArchived = url.pathname === "/notes/archived" ? true : null;
+  const isArchived = url.pathname.includes("/notes/archived") ? true : null;
   const search = url.searchParams.get("search") || "";
   const notes = await db.notes.findMany({
     where: {
@@ -97,14 +99,22 @@ export const links: LinksFunction = () => [
 ];
 
 export default function Index() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { notes, search, url, user_id } = useLoaderData<typeof loader>();
+  const [searchParams] = useSearchParams();
+  const { notes, search, user_id } = useLoaderData<typeof loader>();
+  const navigation = useNavigation();
+  const location = useLocation();
   const [appState, setAppState] = useState(initialState);
 
+  const url = location.pathname;
   const isHome = url === "/notes";
+  const isArchivedHome = url === "/notes/archived";
   const isNewNote = url === "/notes/new";
-  const isArchived = url === "/notes/archived";
+  const isArchivedNote = !isArchivedHome && url.includes("/notes/archived");
+  const isArchivedUrl = isArchivedHome || isArchivedNote;
   const isSearch = searchParams.has("search");
+  const isLoading = navigation.state === "loading" ? "loading" : ""
+  let title = "All Notes";
+  if (isArchivedUrl) title = "Archived Notes";
 
   useEffect(() => {
     setAppState((prevState) => ({
@@ -115,18 +125,18 @@ export default function Index() {
 
   return (
     <AppStateContext.Provider value={{ appState, setAppState }}>
-      <div className="notes-container">
+      <div className={`notes-container ${isLoading}`}>
         <Sidebar />
         <div className="notes-container-content">
-          <PageHeader title="All Notes" search={search} url={url} />
+          <PageHeader title={title} search={search} url={url} />
           <div className="content-body">
             <div className="content-sidebar">
               <Link to="/notes/new" className="create-note-btn">
                 + Create New Note
               </Link>
 
-              {isArchived && !isSearch && (
-                <div className="archived-label mb-4">
+              {isArchivedUrl && !isSearch && (
+                <div className={`archived-label mb-4 ${isArchivedNote ? 'hidden lg:flex' : ''}`}>
                   All your archived notes are stored here. You can restore or
                   delete them anytime.
                 </div>
@@ -136,10 +146,10 @@ export default function Index() {
               {search ? (
                 <div className="flex flex-col">
                   <span className="block lg:hidden search-note mb-4">
-                    {isArchived ? "Archived" : "All"} notes matching "{search}"
+                    {isArchivedHome ? "Archived" : "All"} notes matching "{search}"
                     are displayed below.
                   </span>
-                  {!notes.length && (isHome || isArchived) && (
+                  {!notes.length && (isHome || isArchivedHome) && (
                     <div className="empty-state">
                       No notes match your search. Try a different keyword or
                       create a new note.
@@ -154,7 +164,7 @@ export default function Index() {
                       your thoughts and ideas.
                     </div>
                   )}
-                  {!notes.length && isArchived && (
+                  {!notes.length && isArchivedHome && (
                     <div className="empty-state">
                       No notes have been archived yet. Move notes here for
                       safekeeping, or create a new note.
@@ -163,7 +173,7 @@ export default function Index() {
                 </>
               )}
               <div
-                className={`note-list-container ${isHome ? "home" : "other"}`}
+                className={`note-list-container ${(isHome || isArchivedHome) ? "home" : "other"}`}
               >
                 {isNewNote && (
                   <div className="untitled-note">Untitled Note</div>
@@ -172,7 +182,7 @@ export default function Index() {
                   <React.Fragment key={note.id}>
                     {idx != 0 && <div className="divider" />}
                     <NavLink
-                      to={`/notes/${note.id}${
+                      to={`/notes/${isArchivedUrl ? 'archived/' : ''}${note.id}${
                         isSearch ? "?search=" + search : ""
                       }`}
                       className="note-list"
@@ -186,12 +196,11 @@ export default function Index() {
                         ))}
                       </div>
                       <div className="list-date">
-                        {new Intl.DateTimeFormat("en-GB", {
+                        {new Date(note.updated_at).toLocaleDateString("en-GB", {
                           day: "2-digit",
                           month: "short",
                           year: "numeric",
-                          timeZone: "UTC",
-                        }).format(new Date(`${note.updated_at}`))}
+                        })}
                       </div>
                     </NavLink>
                   </React.Fragment>
