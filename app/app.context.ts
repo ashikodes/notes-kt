@@ -6,7 +6,7 @@ export const initialState = {
   user_id: "",
   search: "",
   toast: "" as "saved" | "archived" | "deleted" | "updated" | "restored" | "",
-  modal: "" as "archived" | "deleted" | "",
+  modal: "" as "archive" | "delete" | "",
   note: {} as Prisma.NotesUncheckedCreateInput & {
     Tags: Prisma.TagCreateInput[];
   },

@@ -18,11 +18,15 @@
 
 .modal-content {
   display: flex;
-  width: 27.5rem;
+  width: 90%;
   flex-direction: column;
   border-radius: var(--spacing-150, 0.75rem);
   border: 1px solid var(--colors-neutral-200, #e0e4ea);
   background: var(--colors-base-white, #fff);
+
+  @media screen and (min-width: 48rem) {
+    width: 27.5rem;
+  }
 
   .content-top {
     display: flex;
@@ -116,5 +120,8 @@
   .modal-btn.primary {
     background: var(--colors-blue-500, #335cff);
     color: #fff;
+  }
+  .modal-btn.delete {
+    background: var(--colors-red-500, #FB3748);
   }
 }

@@ -219,6 +219,13 @@
     color: var(--colors-blue-500, #335cff);
   }
 
+  .form-header-btn.preview,
+  .divider.preview {
+    @media screen and (min-width: 62rem) {
+      display: none;
+    }
+  }
+
   .form-footer {
     display: none;
     align-items: center;

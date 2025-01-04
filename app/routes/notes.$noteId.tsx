@@ -4,7 +4,12 @@ import {
   LoaderFunctionArgs,
   redirect,
 } from "@remix-run/node";
-import { Form, useActionData, useLoaderData, useSearchParams } from "@remix-run/react";
+import {
+  Form,
+  useActionData,
+  useLoaderData,
+  useSearchParams,
+} from "@remix-run/react";
 import { randomUUID } from "node:crypto";
 import { act, useContext, useEffect, useState } from "react";
 import { AppContextType, AppStateContext } from "~/app.context";
@@ -129,8 +134,10 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 
 export default function Note() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const loaderToast = searchParams.get("toast") as AppContextType["appState"]["toast"];
-  
+  const loaderToast = searchParams.get(
+    "toast"
+  ) as AppContextType["appState"]["toast"];
+
   const { note } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const actionDone = (
@@ -148,6 +155,7 @@ export default function Note() {
     const toastAction = actionDone || loaderToast;
     setAppState((prevState) => ({
       ...prevState,
+      modal: "",
       toast: toastAction ? toastAction : "",
     }));
     if (toastAction) {
@@ -162,22 +170,32 @@ export default function Note() {
       }, 3000);
     }
   }, [actionData, loaderToast]);
+
+  const showModal = (modal: "archive" | "delete") => {
+    setAppState((prevState) => ({
+      ...prevState,
+      modal,
+    }));
+  };
+
   return (
     <>
       <NoteForm />
       <div className="note-sidebar">
-        <Form className="w-full" method="patch">
-          <button type="submit" className="note-sidebar-btn">
-            <img src={archive} alt="Archive" />
-            Archive Note
-          </button>
-        </Form>
-        <Form method="delete" className="w-full">
-          <button className="note-sidebar-btn">
-            <img src={thrash} alt="Delete" />
-            Delete Note
-          </button>
-        </Form>
+        <button
+          onClick={() => showModal("archive")}
+          className="note-sidebar-btn"
+        >
+          <img src={archive} alt="Archive" />
+          Archive Note
+        </button>
+        <button
+          onClick={() => showModal("delete")}
+          className="note-sidebar-btn"
+        >
+          <img src={thrash} alt="Delete" />
+          Delete Note
+        </button>
       </div>
     </>
   );

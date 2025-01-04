@@ -7,12 +7,13 @@ import archivedActive from "~/assets/svg/archived-active.svg";
 import plus from "~/assets/svg/plus.svg";
 import tags from "~/assets/svg/tags.svg";
 import settings from "~/assets/svg/settings.svg";
-import { NavLink, useSearchParams } from "@remix-run/react";
+import { NavLink, useLocation, useSearchParams } from "@remix-run/react";
 
 export default function BottomNav() {
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const location = useLocation();
   const hasSearch = searchParams.has("search");
+  const isHome = location.pathname === "/notes";
   return (
     <div className="bottom-nav-container">
       <div className="bottom-nav">
@@ -53,11 +54,13 @@ export default function BottomNav() {
           <span className="nav-text">Settings</span>
         </div>
       </div>
-      <NavLink to="/notes/new" className="floating-create">
-        <button className="floating-btn">
-          <img src={plus} alt="Plus" />
-        </button>
-      </NavLink>
+      {isHome && (
+        <NavLink to="/notes/new" className="floating-create">
+          <button className="floating-btn">
+            <img src={plus} alt="Plus" />
+          </button>
+        </NavLink>
+      )}
     </div>
   );
 }

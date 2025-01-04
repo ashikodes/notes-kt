@@ -4,18 +4,27 @@ import ReactMarkdown from "react-markdown";
 import { AppContextType, AppStateContext } from "~/app.context";
 import tag from "~/assets/svg/tags.svg";
 import clock from "~/assets/svg/clock.svg";
+import archiveIcon from "~/assets/svg/archived.svg";
+import deleteIcon from "~/assets/svg/thrash.svg";
 import chevronLeft from "~/assets/svg/chevron-left.svg";
 
 export default function NoteForm() {
   const [markdown, setMarkdown] = useState<string>("");
   const [preview, setPreview] = useState<boolean>(false);
   const [details, setDetails] = useState<AppContextType["appState"]["note"]>();
-  const { appState } = useContext(AppStateContext);
+  const { appState, setAppState } = useContext(AppStateContext);
 
   useEffect(() => {
     setDetails(appState.note);
     setMarkdown(appState.note.content ?? "");
   }, [appState.note]);
+
+  const showModal = (modal: "archive" | "delete") => {
+    setAppState((prevState) => ({
+      ...prevState,
+      modal,
+    }));
+  };
   return (
     <div className="note-form-container">
       <Form method="post" className="note-form">
@@ -25,14 +34,8 @@ export default function NoteForm() {
             Back
           </Link>
           <div className="right-control">
-            <button
-              onClick={() => setPreview(!preview)}
-              type="button"
-              className="form-header-btn"
-            >
-              {markdown && !preview ? "Preview" : ""}
-              {preview && markdown ? "Edit" : ""}
-            </button>
+            <img onClick={() => showModal("archive")} src={archiveIcon} alt="Archive" />
+            <img onClick={() => showModal("delete")} src={deleteIcon} alt="Delete" />
             <Link to="/notes" className="form-header-btn cancel">
               Cancel
             </Link>
@@ -81,6 +84,15 @@ export default function NoteForm() {
           </div>
         </div>
         <div className="divider" />
+        <button
+          onClick={() => setPreview(!preview)}
+          type="button"
+          className="form-header-btn preview"
+        >
+          {markdown && !preview ? "Preview" : ""}
+          {preview && markdown ? "Edit" : ""}
+        </button>
+        <div className="divider preview" />
         {preview && (
           <div className="note-content">
             <ReactMarkdown>{markdown}</ReactMarkdown>
