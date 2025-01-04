@@ -65,7 +65,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return newNote;
     });
 
-    return redirect(`/notes/${newNote.id}`);
+    return redirect(`/notes/${newNote.id}?toast=saved`);
   } catch (error) {
     console.error("Error creating note:", error);
     return { error: "Failed to create note. Please try again." };

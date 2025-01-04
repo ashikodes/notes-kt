@@ -1,6 +1,6 @@
 import archive from "~/assets/svg/archived.svg";
 
-export default function ArchiveModal() {
+export default function Modal() {
   return (
     <>
       <div className="note-modal archive" />

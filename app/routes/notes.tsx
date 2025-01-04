@@ -10,6 +10,7 @@ import notesscss from "~/styles/notes.scss?url";
 import sidebarscss from "~/styles/sidebar.scss?url";
 import pageheaderscss from "~/styles/page-header.scss?url";
 import bottomnavscss from "~/styles/bottom-nav.scss?url";
+import toastscss from "~/styles/toast.scss?url";
 import { db } from "~/db.server";
 import {
   useLoaderData,
@@ -24,7 +25,8 @@ import PageHeader from "~/components/PageHeader";
 import BottomNav from "~/components/BottomNav";
 import React, { useEffect, useState } from "react";
 import { AppStateContext, initialState } from "~/app.context";
-import ArchiveModal from "~/components/Modal/ArchiveModal";
+import Modal from "~/components/Modal/Modal";
+import Toast from "~/components/Modal/Toast";
 
 export const meta: MetaFunction = () => {
   return [
@@ -89,6 +91,7 @@ export const links: LinksFunction = () => [
   { rel: "stylesheet", href: sidebarscss },
   { rel: "stylesheet", href: pageheaderscss },
   { rel: "stylesheet", href: bottomnavscss },
+  { rel: "stylesheet", href: toastscss },
 ];
 
 export default function Index() {
@@ -199,7 +202,8 @@ export default function Index() {
           </div>
         </div>
         <BottomNav />
-        {appState.modal === "archive" && <ArchiveModal />}
+        {appState.modal && <Modal />}
+        <Toast />
       </div>
     </AppStateContext.Provider>
   );

@@ -5,7 +5,8 @@ import { Prisma } from "@prisma/client";
 export const initialState = {
   user_id: "",
   search: "",
-  modal: "" as "archive" | "delete" | "",
+  toast: "" as "saved" | "archived" | "deleted" | "updated" | "restored" | "",
+  modal: "" as "archived" | "deleted" | "",
   note: {} as Prisma.NotesUncheckedCreateInput & {
     Tags: Prisma.TagCreateInput[];
   },
