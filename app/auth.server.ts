@@ -1,4 +1,5 @@
 import { Authenticator } from "remix-auth";
+import { v4 } from "uuid";
 import { db } from "./db.server";
 import { OAuth2Strategy } from "remix-auth-oauth2";
 
@@ -48,7 +49,7 @@ authenticator.use(
         if (!user) {
             user = await db.users.create({
                 data: {
-                    id: userInfo.sub,
+                    id: v4(),
                     email: userInfo.email,
                     username: userInfo.name,
                     auth_type: "google",

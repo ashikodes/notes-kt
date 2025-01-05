@@ -27,7 +27,7 @@ model Users {
   password_hash String? @db.VarChar
   otp_code      String? @db.VarChar
   auth_type     String? @db.VarChar
-  username      String  @db.VarChar
+  username      String? @db.VarChar
   Notes         Notes[]
   Session       Session[]
 }

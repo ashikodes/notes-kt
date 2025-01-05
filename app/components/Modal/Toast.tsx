@@ -25,6 +25,10 @@ const toastConfig = {
         text: "Note restored to active notes.",
         link: "restored",
     },
+    tag_deleted: {
+        text: "Tag deleted.",
+        link: "",
+    },
 }
 
 export default function Toast() {

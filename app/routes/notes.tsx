@@ -68,9 +68,21 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const search = url.searchParams.get("search") || "";
   const notes = await db.notes.findMany({
     where: {
-      title: {
-        contains: search,
-      },
+      // title, content or tags may contain the search term
+      OR: [
+        { title: { contains: search, mode: "insensitive" } },
+        { content: { contains: search, mode: "insensitive" } },
+        {
+          Tags: {
+            some: {
+              name: {
+                contains: search,
+                mode: "insensitive",
+              },
+            },
+          },
+        },
+      ],
       user_id: userSession.user_id,
       archived: isArchived,
     },
@@ -84,7 +96,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({
     notes,
     search,
-    url: url.pathname,
     user_id: userSession.user_id,
   });
 }

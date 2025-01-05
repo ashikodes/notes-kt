@@ -1,0 +1,102 @@
+.tags-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-bottom: 4rem;
+
+  @media screen and (min-width: 62rem) {
+    display: none;
+  }
+}
+
+.content-title {
+  color: var(--colors-neutral-950, #0e121b);
+  font-feature-settings: "liga" off, "clig" off;
+
+  /* sans-serif/text-preset-1 */
+  font-family: Inter;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 120%; /* 1.8rem */
+  letter-spacing: -0.03125rem;
+}
+
+.tags-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  align-self: stretch;
+}
+
+.tag-item {
+  display: flex;
+  padding: 0.625rem 0rem;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: stretch;
+}
+
+.tag-item img {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.divider {
+  background: var(--colors-neutral-200, #e0e4ea);
+  height: 0.0625rem;
+  align-self: stretch;
+}
+
+.tag-name {
+  color: var(--colors-neutral-700, #2b303b);
+  font-feature-settings: "liga" off, "clig" off;
+
+  /* sans-serif/text-preset-4 */
+  font-family: Inter;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 120%; /* 1.05rem */
+  letter-spacing: -0.0125rem;
+}
+
+.tag-search-label {
+  color: var(--colors-neutral-700, #2b303b);
+  font-feature-settings: "liga" off, "clig" off;
+
+  /* sans-serif/text-preset-5 */
+  font-family: Inter;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%; /* 1.1375rem */
+  letter-spacing: -0.0125rem;
+}
+
+.empty-search {
+  padding: var(--spacing-100, 0.5rem);
+  align-items: center;
+  gap: 0.625rem;
+  align-self: stretch;
+  border-radius: 0.5rem;
+  border: 1px solid var(--colors-neutral-200, #e0e4ea);
+  background: var(--colors-neutral-100, #f3f5f8);
+  color: var(--colors-neutral-950, #0e121b);
+  font-feature-settings: "liga" off, "clig" off;
+
+  /* sans-serif/text-preset-5 */
+  font-family: Inter;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%; /* 1.1375rem */
+  letter-spacing: -0.0125rem;
+  width: 100%;
+}
+
+.text-link {
+  text-decoration: underline;
+  cursor: pointer;
+}

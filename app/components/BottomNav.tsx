@@ -5,15 +5,17 @@ import searchActive from "~/assets/svg/search-active.svg";
 import archived from "~/assets/svg/archived.svg";
 import archivedActive from "~/assets/svg/archived-active.svg";
 import plus from "~/assets/svg/plus.svg";
-import tags from "~/assets/svg/tags.svg";
+import tagIcon from "~/assets/svg/tag.svg";
+import tagIconActive from "~/assets/svg/tag-active.svg";
 import settings from "~/assets/svg/settings.svg";
-import { NavLink, useLocation, useSearchParams } from "@remix-run/react";
+import settingsActive from "~/assets/svg/settings-active.svg";
+import { NavLink, useParams, useSearchParams } from "@remix-run/react";
 
 export default function BottomNav() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const location = useLocation();
+  const params = useParams();
   const hasSearch = searchParams.has("search");
-  const isHome = location.pathname === "/notes";
+  const hideCreate = params.noteId;
   return (
     <div className="bottom-nav-container">
       <div className="bottom-nav">
@@ -44,17 +46,19 @@ export default function BottomNav() {
           <span className="nav-text">Archived</span>
         </NavLink>
         <div className="divider" />
-        <div className="menu-item">
-          <img src={tags} alt="Tags" />
+        <NavLink to="/tags" className="menu-item">
+          <img src={tagIcon} className="menu-icon" alt="Tags" />
+          <img src={tagIconActive} className="menu-icon-active" alt="Tags" />
           <span className="nav-text">Tags</span>
-        </div>
+        </NavLink>
         <div className="divider" />
-        <div className="menu-item">
-          <img src={settings} alt="Settings" />
+        <NavLink to="/settings" className="menu-item">
+          <img src={settings} className="menu-icon" alt="Settings" />
+          <img src={settingsActive} className="menu-icon-active" alt="Settings" />
           <span className="nav-text">Settings</span>
-        </div>
+        </NavLink>
       </div>
-      {isHome && (
+      {!hideCreate && (
         <NavLink to="/notes/new" className="floating-create">
           <button className="floating-btn">
             <img src={plus} alt="Plus" />

@@ -2,12 +2,13 @@ import { Form, Link, useLocation } from "@remix-run/react";
 import { useContext, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { AppContextType, AppStateContext } from "~/app.context";
-import tag from "~/assets/svg/tags.svg";
+import tagIcon from "~/assets/svg/tag.svg";
 import clock from "~/assets/svg/clock.svg";
 import archiveIcon from "~/assets/svg/archived.svg";
 import deleteIcon from "~/assets/svg/thrash.svg";
 import chevronLeft from "~/assets/svg/chevron-left.svg";
 import refreshLeft from "~/assets/svg/refresh-left.svg";
+import loading from "~/assets/svg/loading.svg";
 
 export default function NoteForm() {
   const location = useLocation();
@@ -87,7 +88,7 @@ export default function NoteForm() {
         <div className="note-properties">
           <div className="note-prop">
             <div className="tag-label-icon">
-              <img className="tag-icon" src={tag} alt="Tag" />
+              <img className="tag-icon" src={tagIcon} alt="Tag" />
               <span className="tag-label">Tags</span>
             </div>
             <input
@@ -97,6 +98,15 @@ export default function NoteForm() {
               placeholder="Add tags separated by commas (e.g. Work, Planning)"
             />
           </div>
+          {details?.archived && (
+            <div className="note-prop">
+              <div className="tag-label-icon">
+                <img className="tag-icon" src={loading} alt="status" />
+                <span className="tag-label">Status</span>
+              </div>
+              <span className="prop-value">Archived</span>
+            </div>
+          )}
           <div className="note-prop">
             <div className="tag-label-icon">
               <img className="tag-icon" src={clock} alt="Tag" />
