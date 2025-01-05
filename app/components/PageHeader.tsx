@@ -1,7 +1,8 @@
 import settings from "../assets/svg/settings.svg";
+import settingsActive from "../assets/svg/settings-active.svg";
 import searchIcon from "../assets/svg/search.svg";
 import loading from "../assets/svg/loading.svg";
-import { Form, useNavigation, useSearchParams } from "@remix-run/react";
+import { Form, NavLink, useNavigation, useSearchParams } from "@remix-run/react";
 import { useState, useEffect, useRef } from "react";
 
 interface PageHeaderProps {
@@ -22,6 +23,7 @@ export default function PageHeader({ title, search, url }: PageHeaderProps) {
 
   const isHome = url === "/notes";
   const isArchivedHome = url === "/notes/archived";
+  const isSettings = url === "/settings";
 
   useEffect(() => {
     if (timeoutRef.current) {
@@ -78,7 +80,7 @@ export default function PageHeader({ title, search, url }: PageHeaderProps) {
             <input
               name="search"
               onChange={(e) => setSearchValue(e.target.value)}
-              disabled={searching}
+              disabled={searching || isSettings}
               value={searchValue || ""}
               className="search-input flex-grow"
               type="search"
@@ -86,9 +88,10 @@ export default function PageHeader({ title, search, url }: PageHeaderProps) {
             />
           </Form>
         </div>
-        <div className="header-settings">
-          <img src={settings} alt="Settings" />
-        </div>
+        <NavLink to="/settings" className="header-settings">
+          <img src={settings} className="nav-icon" alt="Settings" />
+          <img src={settingsActive} className="nav-icon-active" alt="Settings" />
+        </NavLink>
       </div>
     </div>
   );

@@ -1,0 +1,37 @@
+.settings-container {
+  .menu-item {
+    display: flex;
+    padding: var(--spacing-100, 0.5rem);
+    align-items: center;
+    gap: var(--spacing-100, 0.5rem);
+    align-self: stretch;
+    border-radius: var(--spacing-075, 0.375rem);
+    cursor: pointer;
+  }
+
+  .menu-item.active {
+    background: var(--colors-neutral-100, #f3f5f8);
+  }
+
+  .menu-text {
+    color: var(--colors-neutral-950, #0e121b);
+    font-feature-settings: "liga" off, "clig" off;
+
+    /* sans-serif/text-preset-4 */
+    font-family: Inter;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 120%; /* 1.05rem */
+    letter-spacing: -0.0125rem;
+  }
+
+  img.chevron {
+    display: none;
+  }
+
+  .menu-item.active img.chevron {
+    display: block;
+  }
+
+}

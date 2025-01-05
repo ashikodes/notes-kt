@@ -1,5 +1,4 @@
-export default function AllNotes() {
-  
+export default function NotesIndex() {
   return (
     <></>
   );

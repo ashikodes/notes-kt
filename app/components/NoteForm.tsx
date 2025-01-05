@@ -62,12 +62,19 @@ export default function NoteForm() {
           >
             Cancel
           </Link>
-          <button type="submit" className="form-header-btn save">
+          <button
+            onClick={() => {
+              // programmatically submit the form with id note-form
+              document.getElementById("form-submit")?.click();
+            }}
+            type="button"
+            className="form-header-btn save"
+          >
             Save Note
           </button>
         </div>
       </div>
-      <Form method="post" className="note-form">
+      <Form method="post" id="note-form" className="note-form">
         <input type="hidden" value={appState.user_id} name="user_id" />
         <input
           type="text"
@@ -133,7 +140,7 @@ export default function NoteForm() {
         <div className="form-footer">
           <div className="divider" />
           <div className="form-action-footer">
-            <button type="submit" className="form-btn primary">
+            <button id="form-submit" type="submit" className="form-btn primary">
               Save Note
             </button>
             <Link

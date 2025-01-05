@@ -121,4 +121,13 @@
       display: flex;
     }
   }
+
+  .header-settings.active .nav-icon,
+  .header-settings .nav-icon-active {
+    display: none;
+  }
+
+  .header-settings.active .nav-icon-active {
+    display: block;
+  }
 }
