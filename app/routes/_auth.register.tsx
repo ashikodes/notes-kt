@@ -143,10 +143,10 @@ export default function Register() {
             </Form>
             <div className="divider" />
             <p className="login-alt">Or log in with:</p>
-            <button className="login-alt-button">
+            <Link to="/auth/google" className="login-alt-button">
                 <img src={google} alt="Feather" />
                 Google
-            </button>
+            </Link>
             <div className="divider" />
             <Link to="/login" className="no-account-link">Already have an account? <span className="label-link">Login</span></Link>
         </div>

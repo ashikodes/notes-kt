@@ -71,6 +71,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       title: {
         contains: search,
       },
+      user_id: userSession.user_id,
       archived: isArchived,
     },
     include: {

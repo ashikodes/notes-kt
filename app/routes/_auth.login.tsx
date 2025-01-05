@@ -161,10 +161,10 @@ export default function Login() {
             </Form>
             <div className="divider" />
             <p className="login-alt">Or log in with:</p>
-            <button className="login-alt-button">
+            <Link to="/auth/google" className="login-alt-button">
                 <img src={google} alt="Feather" />
                 Google
-            </button>
+            </Link>
             <div className="divider" />
             <Link to="/register" className="no-account-link">
                 No account yet? <span className="label-link">Sign Up</span>
