@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from "@remix-run/react";
+import { Outlet, useLocation, useParams } from "@remix-run/react";
 import PageHeader from "~/components/PageHeader";
 import Sidebar from "~/components/Sidebar";
 import pageheaderscss from "~/styles/page-header.scss?url";
@@ -27,8 +27,9 @@ export const links: LinksFunction = () => [
 
 export default function Tags() {
   const [appState, setAppState] = useState(initialState);
+  const params = useParams();
   const location = useLocation();
-
+  const tagName = params.tagName;
   const url = location.pathname;
   return (
     <AppStateContext.Provider value={{ appState, setAppState }}>

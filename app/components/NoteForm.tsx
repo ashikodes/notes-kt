@@ -49,7 +49,7 @@ export default function NoteForm() {
             src={deleteIcon}
             alt="Delete"
           />
-          {isArchived ? (
+          {details?.archived ? (
             <Form method="patch" className="restore-btn-form">
               <button type="submit" className="restore-btn">
                 <img src={refreshLeft} alt="Restore" />

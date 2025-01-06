@@ -93,7 +93,7 @@ export default function TagDetails() {
 
   return (
     <>
-      <div className={`content-sidebar ${noteId ? "hidden lg:flex" : ""}`}>
+      <div className={`content-sidebar ${noteId ? "hidden lg:flex" : "flex"}`}>
         <Link to="/notes/new" className="create-note-btn">
           + Create New Note
         </Link>

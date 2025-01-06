@@ -2,7 +2,13 @@ import settings from "../assets/svg/settings.svg";
 import settingsActive from "../assets/svg/settings-active.svg";
 import searchIcon from "../assets/svg/search.svg";
 import loading from "../assets/svg/loading.svg";
-import { Form, NavLink, useNavigation, useSearchParams } from "@remix-run/react";
+import {
+  Form,
+  NavLink,
+  useNavigation,
+  useParams,
+  useSearchParams,
+} from "@remix-run/react";
 import { useState, useEffect, useRef } from "react";
 
 interface PageHeaderProps {
@@ -14,6 +20,7 @@ interface PageHeaderProps {
 export default function PageHeader({ title, search, url }: PageHeaderProps) {
   const [searchValue, setSearchValue] = useState(search || "");
   const [searchParams, setSearchParams] = useSearchParams();
+  const params = useParams();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const hasSearch = searchParams.has("search");
   const navigation = useNavigation();
@@ -24,6 +31,8 @@ export default function PageHeader({ title, search, url }: PageHeaderProps) {
   const isHome = url === "/notes";
   const isArchivedHome = url === "/notes/archived";
   const isSettings = url === "/settings";
+  const tagName = params.tagName;
+  const noteId = params.noteId;
 
   useEffect(() => {
     if (timeoutRef.current) {
@@ -52,7 +61,9 @@ export default function PageHeader({ title, search, url }: PageHeaderProps) {
   }, [search]);
 
   return (
-    <div className={`page-header ${(isHome || isArchivedHome) ? 'home' : 'other'}`}>
+    <div
+      className={`page-header ${noteId ? "hidden lg:flex" : "flex"}`}
+    >
       <h2 className="page-header__text">
         {search && <span className="block lg:hidden">Search</span>}
         <div className="">
@@ -62,7 +73,12 @@ export default function PageHeader({ title, search, url }: PageHeaderProps) {
               {searchValue}
             </div>
           ) : (
-            title
+            tagName ? (
+              <div className="">
+                <span className="side-text">Notes Tagged: </span>
+                {tagName}
+              </div>
+            ) : title
           )}
         </div>
       </h2>
@@ -90,7 +106,11 @@ export default function PageHeader({ title, search, url }: PageHeaderProps) {
         </div>
         <NavLink to="/settings" className="header-settings">
           <img src={settings} className="nav-icon" alt="Settings" />
-          <img src={settingsActive} className="nav-icon-active" alt="Settings" />
+          <img
+            src={settingsActive}
+            className="nav-icon-active"
+            alt="Settings"
+          />
         </NavLink>
       </div>
     </div>

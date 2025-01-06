@@ -145,13 +145,13 @@ export default function Index() {
         <div className="notes-container-content">
           <PageHeader title={title} search={search} url={url} />
           <div className="content-body">
-            <div className={`content-sidebar ${noteId ? "hidden lg:flex" : ""}`}>
+            <div className={`content-sidebar ${noteId ? "hidden lg:flex" : "flex"}`}>
               <Link to="/notes/new" className="create-note-btn">
                 + Create New Note
               </Link>
 
               {isArchivedUrl && !isSearch && (
-                <div className={`archived-label mb-4 ${isArchivedNote ? 'hidden lg:flex' : ''}`}>
+                <div className={`archived-label mb-4 ${isArchivedNote ? 'hidden lg:flex' : 'flex'}`}>
                   All your archived notes are stored here. You can restore or
                   delete them anytime.
                 </div>
