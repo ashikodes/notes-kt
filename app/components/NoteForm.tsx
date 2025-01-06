@@ -1,4 +1,4 @@
-import { Form, Link, useLocation } from "@remix-run/react";
+import { Form, Link, useLocation, useParams } from "@remix-run/react";
 import { useContext, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { AppContextType, AppStateContext } from "~/app.context";
@@ -12,11 +12,16 @@ import loading from "~/assets/svg/loading.svg";
 
 export default function NoteForm() {
   const location = useLocation();
+  const params = useParams();
   const [markdown, setMarkdown] = useState<string>("");
   const [preview, setPreview] = useState<boolean>(false);
   const [details, setDetails] = useState<AppContextType["appState"]["note"]>();
   const { appState, setAppState } = useContext(AppStateContext);
   const isArchived = location.pathname.includes("/notes/archived");
+  const tagName = params.tagName;
+  let cancelUrl = isArchived ? "/notes/archived" : "/notes";
+  if (tagName) cancelUrl = `/tags/${tagName}`;
+  
   useEffect(() => {
     setDetails(appState.note);
     setMarkdown(appState.note.content ?? "");
@@ -32,7 +37,7 @@ export default function NoteForm() {
     <div className="note-form-container">
       <div className="form-header">
         <Link
-          to={isArchived ? "/notes/archived" : "/notes"}
+          to={cancelUrl}
           className="back-btn"
         >
           <img src={chevronLeft} alt="Back" />
@@ -58,7 +63,7 @@ export default function NoteForm() {
             />
           )}
           <Link
-            to={isArchived ? "/notes/archived" : "/notes"}
+            to={cancelUrl}
             className="form-header-btn cancel"
           >
             Cancel
@@ -154,7 +159,7 @@ export default function NoteForm() {
               Save Note
             </button>
             <Link
-              to={isArchived ? "/notes/archived" : "/notes"}
+              to={cancelUrl}
               className="form-btn secondary"
             >
               Cancel

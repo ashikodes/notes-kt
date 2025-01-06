@@ -32,7 +32,6 @@
   }
 
   .content-sidebar {
-    display: flex;
     flex-direction: column;
     background: #fff;
     gap: var(--spacing-200, 1rem);
@@ -148,15 +147,8 @@
     gap: var(--spacing-200, 1rem);
     width: 100%;
 
-    &.other {
-      display: none;
-    }
-
     @media screen and (min-width: 62rem) {
       padding-bottom: 0;
-      &.other {
-        display: flex;
-      }
     }
   }
 

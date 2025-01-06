@@ -8,7 +8,6 @@ import {
   Form,
   useActionData,
   useLoaderData,
-  useSearchParams,
 } from "@remix-run/react";
 import { randomUUID } from "node:crypto";
 import { act, useContext, useEffect, useState } from "react";
@@ -17,27 +16,34 @@ import NoteForm from "~/components/NoteForm";
 import { db } from "~/db.server";
 import noteformscss from "~/styles/note-form.scss?url";
 import modalscss from "~/styles/modal.scss?url";
-import toastscss from "~/styles/toast.scss?url";
 import archive from "~/assets/svg/archived.svg";
 import thrash from "~/assets/svg/thrash.svg";
+import refreshLeft from "~/assets/svg/refresh-left.svg";
+import { Prisma } from "@prisma/client";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: noteformscss },
   { rel: "stylesheet", href: modalscss },
-  { rel: "stylesheet", href: toastscss },
 ];
 
-export const loader = async ({
-  params,
-}: LoaderFunctionArgs): Promise<Response> => {
+export const loader = async ({ params }: LoaderFunctionArgs) => {
   const noteId = params.noteId;
+  const tagName = params.tagName;
   try {
+    // where note has the tag
     const note = await db.notes.findUnique({
-      where: { id: noteId, archived: null },
+      where: {
+        id: noteId,
+        Tags: {
+          some: {
+            name: tagName,
+          },
+        },
+      },
       include: { Tags: true },
     });
     if (!note) {
-      return redirect("/notes");
+      return redirect(`/tags/${tagName}`);
     }
     return json({ note });
   } catch (error) {
@@ -69,6 +75,21 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
         },
       });
       return json({ note, actionDone: "archived" });
+    } catch (error) {
+      return json({ error: error, status: 500 });
+    }
+  }
+  if (request.method === "PUT") {
+    // restore the note
+    const noteId = params.noteId;
+    try {
+      const note = await db.notes.update({
+        where: { id: noteId as string },
+        data: {
+          archived: null,
+        },
+      });
+      return json({ note, actionDone: "restored" });
     } catch (error) {
       return json({ error: error, status: 500 });
     }
@@ -133,12 +154,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 };
 
 export default function Note() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const loaderToast = searchParams.get(
-    "toast"
-  ) as AppContextType["appState"]["toast"];
-
-  const { note } = useLoaderData<typeof loader>();
+  const { note } = useLoaderData<{ note: Prisma.NotesCreateInput }>();
   const actionData = useActionData<typeof action>();
   const actionDone = (
     actionData && "actionDone" in actionData ? actionData.actionDone : ""
@@ -152,7 +168,7 @@ export default function Note() {
   }, [note]);
 
   useEffect(() => {
-    const toastAction = actionDone || loaderToast;
+    const toastAction = actionDone;
     setAppState((prevState) => ({
       ...prevState,
       modal: "",
@@ -164,12 +180,9 @@ export default function Note() {
           ...prevState,
           toast: "",
         }));
-        if (loaderToast) {
-          setSearchParams({});
-        }
       }, 3000);
     }
-  }, [actionData, loaderToast]);
+  }, [actionData]);
 
   const showModal = (modal: "archive" | "delete") => {
     setAppState((prevState) => ({
@@ -182,13 +195,22 @@ export default function Note() {
     <>
       <NoteForm />
       <div className="note-sidebar">
-        <button
-          onClick={() => showModal("archive")}
-          className="note-sidebar-btn"
-        >
-          <img src={archive} alt="Archive" />
-          Archive Note
-        </button>
+        {note.archived ? (
+          <Form method="put" className="w-full">
+            <button className="note-sidebar-btn">
+              <img src={refreshLeft} alt="Restore" />
+              Restore Note
+            </button>
+          </Form>
+        ) : (
+          <button
+            onClick={() => showModal("archive")}
+            className="note-sidebar-btn"
+          >
+            <img src={archive} alt="Archive" />
+            Archive Note
+          </button>
+        )}
         <button
           onClick={() => showModal("delete")}
           className="note-sidebar-btn"

@@ -59,7 +59,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
     }
   }
   if (request.method === "PATCH") {
-    // set archived to true
+    // restore the note
     const noteId = params.noteId;
     try {
       const note = await db.notes.update({

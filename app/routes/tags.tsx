@@ -13,6 +13,7 @@ import BottomNav from "~/components/BottomNav";
 import { AppStateContext, initialState } from "~/app.context";
 import { useState } from "react";
 import Toast from "~/components/Modal/Toast";
+import Modal from "~/components/Modal/Modal";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: appscss },
@@ -41,6 +42,7 @@ export default function Tags() {
         </div>
         <BottomNav />
         <Toast />
+        <Modal />
       </div>
     </AppStateContext.Provider>
   );

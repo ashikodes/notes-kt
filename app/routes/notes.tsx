@@ -22,6 +22,7 @@ import {
   NavLink,
   useNavigation,
   useLocation,
+  useParams,
 } from "@remix-run/react";
 import Sidebar from "~/components/Sidebar";
 import PageHeader from "~/components/PageHeader";
@@ -112,6 +113,7 @@ export const links: LinksFunction = () => [
 
 export default function Index() {
   const [searchParams] = useSearchParams();
+  const params = useParams();
   const { notes, search, user_id } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
   const location = useLocation();
@@ -119,6 +121,7 @@ export default function Index() {
 
   const url = location.pathname;
   const isHome = url === "/notes";
+  const noteId = params.noteId;
   const isArchivedHome = url === "/notes/archived";
   const isNewNote = url === "/notes/new";
   const isArchivedNote = !isArchivedHome && url.includes("/notes/archived");
@@ -142,7 +145,7 @@ export default function Index() {
         <div className="notes-container-content">
           <PageHeader title={title} search={search} url={url} />
           <div className="content-body">
-            <div className="content-sidebar">
+            <div className={`content-sidebar ${noteId ? "hidden lg:flex" : ""}`}>
               <Link to="/notes/new" className="create-note-btn">
                 + Create New Note
               </Link>
@@ -185,7 +188,7 @@ export default function Index() {
                 </>
               )}
               <div
-                className={`note-list-container ${(isHome || isArchivedHome) ? "home" : "other"}`}
+                className={`note-list-container`}
               >
                 {isNewNote && (
                   <div className="untitled-note">Untitled Note</div>
