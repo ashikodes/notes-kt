@@ -52,7 +52,7 @@ export default function Index() {
         <div className="notes-container-content">
           <PageHeader title="Settings" search="" url={url} />
           <div className="content-body">
-            <div className="content-sidebar">
+            <div className="content-sidebar flex">
               <div className="menu-item">
                 <img src={sun} alt="sun" />
                 <span className="menu-text">Color Theme</span>

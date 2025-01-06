@@ -50,7 +50,7 @@ export default function NoteForm() {
             alt="Delete"
           />
           {details?.archived ? (
-            <Form method="patch" className="restore-btn-form">
+            <Form method={tagName ? "put" : "patch"} className="restore-btn-form">
               <button type="submit" className="restore-btn">
                 <img src={refreshLeft} alt="Restore" />
               </button>

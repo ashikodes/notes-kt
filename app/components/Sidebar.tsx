@@ -15,9 +15,10 @@ export default function Sidebar() {
   useEffect(() => {
     async function fetchTags() {
       const request = await fetch("/tags/all");
-      const tags = await request.json() as Prisma.TagCreateWithoutNotesInput[];
+      const tags =
+        (await request.json()) as Prisma.TagCreateWithoutNotesInput[];
       setTags(tags);
-    };
+    }
     fetchTags();
   }, []);
   return (
@@ -47,7 +48,7 @@ export default function Sidebar() {
             <img src={chevronRight} className="chevron" alt="Chevron Right" />
           </NavLink>
           <div className="divider" />
-          <span className="section-text">Tags</span>
+          {tags?.length && <span className="section-text">Tags</span>}
           {tags?.map((tag) => (
             <NavLink
               key={tag.id}
