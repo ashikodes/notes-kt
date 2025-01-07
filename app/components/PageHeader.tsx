@@ -5,6 +5,7 @@ import loading from "../assets/svg/loading.svg";
 import {
   Form,
   NavLink,
+  useLocation,
   useNavigation,
   useParams,
   useSearchParams,
@@ -21,6 +22,7 @@ export default function PageHeader({ title, search, url }: PageHeaderProps) {
   const [searchValue, setSearchValue] = useState(search || "");
   const [searchParams, setSearchParams] = useSearchParams();
   const params = useParams();
+  const location = useLocation();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const hasSearch = searchParams.has("search");
   const navigation = useNavigation();
@@ -28,9 +30,7 @@ export default function PageHeader({ title, search, url }: PageHeaderProps) {
     navigation.location &&
     new URLSearchParams(navigation.location.search).has("search");
 
-  const isHome = url === "/notes";
-  const isArchivedHome = url === "/notes/archived";
-  const isSettings = url === "/settings";
+  const isSettings = location.pathname.includes("settings");
   const tagName = params.tagName;
   const noteId = params.noteId;
 
@@ -62,7 +62,7 @@ export default function PageHeader({ title, search, url }: PageHeaderProps) {
 
   return (
     <div
-      className={`page-header ${noteId ? "hidden lg:flex" : "flex"}`}
+      className={`page-header ${(noteId || isSettings) ? "hidden lg:flex" : "flex"}`}
     >
       <h2 className="page-header__text">
         {search && <span className="block lg:hidden">Search</span>}

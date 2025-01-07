@@ -22,8 +22,9 @@
   .content-body {
     display: flex;
     flex-direction: column;
-    padding: var(--spacing-200, 1rem) var(--spacing-400, 2rem);
+    padding: var(--spacing-200, 1rem) var(--spacing-400, 2rem) 5rem var(--spacing-400, 2rem);
     flex-grow: 1;
+    gap: var(--spacing-200, 1rem);
 
     @media screen and (min-width: 62rem) {
       flex-direction: row;

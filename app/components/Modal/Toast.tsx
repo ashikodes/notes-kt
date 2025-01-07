@@ -29,6 +29,10 @@ const toastConfig = {
         text: "Tag deleted.",
         link: "",
     },
+    settings: {
+        text: "Settings saved.",
+        link: "",
+    },
 }
 
 export default function Toast() {

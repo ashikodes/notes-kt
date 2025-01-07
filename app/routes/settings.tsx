@@ -6,7 +6,14 @@ import pageheaderscss from "~/styles/page-header.scss?url";
 import bottomnavscss from "~/styles/bottom-nav.scss?url";
 import settingsscss from "~/styles/settings.scss?url";
 import toastscss from "~/styles/toast.scss?url";
-import { Outlet, useNavigation, useLocation, Form } from "@remix-run/react";
+import {
+  Outlet,
+  useNavigation,
+  useLocation,
+  Form,
+  NavLink,
+  Link,
+} from "@remix-run/react";
 import Sidebar from "~/components/Sidebar";
 import PageHeader from "~/components/PageHeader";
 import BottomNav from "~/components/BottomNav";
@@ -16,6 +23,7 @@ import Modal from "~/components/Modal/Modal";
 import Toast from "~/components/Modal/Toast";
 import sun from "~/assets/svg/sun.svg";
 import chevronRight from "~/assets/svg/chevron-right.svg";
+import chevronLeft from "~/assets/svg/chevron-left.svg";
 import fontType from "~/assets/svg/font-type.svg";
 import lock from "~/assets/svg/lock.svg";
 import logout from "~/assets/svg/logout.svg";
@@ -43,17 +51,22 @@ export default function Index() {
   const [appState, setAppState] = useState(initialState);
 
   const url = location.pathname;
+  const isSettingsHome = url === "/settings";
   const isLoading = navigation.state === "loading" ? "loading" : "";
 
   return (
     <AppStateContext.Provider value={{ appState, setAppState }}>
-      <div className={`notes-container settings-container ${isLoading}`}>
+      <div className={`notes-container settings ${isLoading}`}>
         <Sidebar />
         <div className="notes-container-content">
           <PageHeader title="Settings" search="" url={url} />
           <div className="content-body">
-            <div className="content-sidebar flex">
-              <div className="menu-item">
+            <Link to="/settings" className={`${isSettingsHome ? "hidden" : "flex lg:hidden"} settings-nav`}>
+              <img src={chevronLeft} alt="Chevron Left" />
+              <span className="nav-title">Settings</span>
+            </Link>
+            <div className={`content-sidebar ${isSettingsHome ? "flex" : "hidden lg:flex"}`}>
+              <NavLink to="/settings/color" className="menu-item">
                 <img src={sun} alt="sun" />
                 <span className="menu-text">Color Theme</span>
                 <img
@@ -61,8 +74,8 @@ export default function Index() {
                   className="chevron"
                   alt="Chevron Right"
                 />
-              </div>
-              <div className="menu-item">
+              </NavLink>
+              <NavLink to="/settings/font" className="menu-item">
                 <img src={fontType} alt="sun" />
                 <span className="menu-text">Font Theme</span>
                 <img
@@ -70,7 +83,7 @@ export default function Index() {
                   className="chevron"
                   alt="Chevron Right"
                 />
-              </div>
+              </NavLink>
               <div className="menu-item">
                 <img src={lock} alt="sun" />
                 <span className="menu-text">Change Password</span>

@@ -12,6 +12,7 @@ import pageheaderscss from "~/styles/page-header.scss?url";
 import bottomnavscss from "~/styles/bottom-nav.scss?url";
 import toastscss from "~/styles/toast.scss?url";
 import modalscss from "~/styles/modal.scss?url";
+import settingsscss from "~/styles/settings.scss?url";
 import { db } from "~/db.server";
 import {
   useLoaderData,
@@ -109,6 +110,7 @@ export const links: LinksFunction = () => [
   { rel: "stylesheet", href: bottomnavscss },
   { rel: "stylesheet", href: modalscss },
   { rel: "stylesheet", href: toastscss },
+  { rel: "stylesheet", href: settingsscss },
 ];
 
 export default function Index() {

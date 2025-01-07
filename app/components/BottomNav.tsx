@@ -9,13 +9,15 @@ import tagIcon from "~/assets/svg/tag.svg";
 import tagIconActive from "~/assets/svg/tag-active.svg";
 import settings from "~/assets/svg/settings.svg";
 import settingsActive from "~/assets/svg/settings-active.svg";
-import { NavLink, useParams, useSearchParams } from "@remix-run/react";
+import { NavLink, useLocation, useParams, useSearchParams } from "@remix-run/react";
 
 export default function BottomNav() {
   const [searchParams, setSearchParams] = useSearchParams();
   const params = useParams();
+  const location = useLocation();
+  const isSettings = location.pathname.includes("settings");
   const hasSearch = searchParams.has("search");
-  const hideCreate = params.noteId;
+  const hideCreate = params.noteId || isSettings;
   return (
     <div className="bottom-nav-container">
       <div className="bottom-nav">
