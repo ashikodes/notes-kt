@@ -1,25 +1,27 @@
-import { json, LinksFunction } from "@remix-run/node";
+import { LinksFunction } from "@remix-run/node";
 import tagsscss from "~/styles/tags.scss?url";
 import tagIcon from "~/assets/svg/tag.svg";
-import { useLoaderData } from "@remix-run/react";
-import { db } from "~/db.server";
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Prisma } from "@prisma/client";
+import { NavLink } from "@remix-run/react";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tagsscss },
 ];
 
-export const loader = async () => {
-  const tags = await db.tag.findMany();
-  return json({ tags });
-};
-
 export default function Tags() {
-  const { tags } = useLoaderData<typeof loader>();
+  const [tags, setTags] = useState<Prisma.TagCreateWithoutNotesInput[]>([]);
+  useEffect(() => {
+    async function fetchTags() {
+      const request = await fetch("/tags/all");
+      const tags =
+        (await request.json()) as Prisma.TagCreateWithoutNotesInput[];
+      setTags(tags);
+    }
+    fetchTags();
+  }, []);
   return (
     <div className="tags-container">
-      <span className="content-title">Tags</span>
       <div className="tags-list">
         {tags.map((tag, idx) => (
           <React.Fragment key={tag.id}>

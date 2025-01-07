@@ -9,6 +9,22 @@
   }
 }
 
+.nav-back-btn {
+  align-items: center;
+  gap: var(--spacing-050, 0.25rem);
+  color: var(--colors-neutral-600, #525866);
+  font-feature-settings: "liga" off, "clig" off;
+  padding: var(--spacing-200, 1rem) var(--spacing-400, 2rem) 0.5rem;
+
+  /* sans-serif/text-preset-5 */
+  font-family: Inter;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%; /* 1.1375rem */
+  letter-spacing: -0.0125rem;
+}
+
 .content-title {
   color: var(--colors-neutral-950, #0e121b);
   font-feature-settings: "liga" off, "clig" off;

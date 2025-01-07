@@ -32,6 +32,7 @@ import React, { useEffect, useState } from "react";
 import { AppStateContext, initialState } from "~/app.context";
 import Modal from "~/components/Modal/Modal";
 import Toast from "~/components/Modal/Toast";
+import { authRoute } from "~/auth.server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -40,29 +41,9 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  const cookie = request.headers.get("Cookie");
-  const session = await getSession(cookie);
-
-  // Check if the user is logged in
-  const sessionId = session.get(`${process.env.SESSION_COOKIE_NAME}`);
-  if (!sessionId) {
-    return redirect("/login");
-  }
-
-  // Fetch user data
-  const userSession = await db.session.findFirst({
-    where: { token: sessionId },
-    include: { Users: true },
-  });
-
-  if (!userSession) {
-    return redirect("/login", {
-      headers: {
-        "Set-Cookie": await destroySession(session),
-      },
-    });
-  }
+export async function loader(args: LoaderFunctionArgs) {
+  const { request } = args;
+  const userSession = await authRoute(args);
 
   // fetch all notes
   const url = new URL(request.url);

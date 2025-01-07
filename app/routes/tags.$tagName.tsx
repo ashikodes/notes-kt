@@ -15,9 +15,12 @@ import {
 } from "@remix-run/react";
 import React, { useContext, useEffect } from "react";
 import { AppStateContext } from "~/app.context";
+import { authRoute } from "~/auth.server";
 import { db } from "~/db.server";
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+export const loader = async (args: LoaderFunctionArgs) => {
+  await authRoute(args);
+  const { params } = args;
   const tagName = params.tagName;
   const allNotes = await db.notes.findMany({
     where: {
@@ -49,7 +52,9 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   return json({ allNotes });
 };
 
-export const action = async ({ request, params }: ActionFunctionArgs) => {
+export const action = async (args: ActionFunctionArgs) => {
+  const { request, params } = args;
+  await authRoute(args);
   if (request.method === "DELETE") {
     const tagName = params.tagName;
     try {

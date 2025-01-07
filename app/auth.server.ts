@@ -2,6 +2,8 @@ import { Authenticator } from "remix-auth";
 import { v4 } from "uuid";
 import { db } from "./db.server";
 import { OAuth2Strategy } from "remix-auth-oauth2";
+import { ActionFunctionArgs, json, LoaderFunctionArgs, redirect } from "@remix-run/node";
+import { destroySession, getSession } from "./session.server";
 
 async function getUserInfo(accessToken: string) {
   const response = await fetch(
@@ -61,3 +63,27 @@ authenticator.use(
   ),
   "google"
 );
+
+export const authRoute = async ({ request }: LoaderFunctionArgs | ActionFunctionArgs) => {
+  const cookie = request.headers.get("Cookie");
+  const session = await getSession(cookie);
+  const sessionId = session.get(`${process.env.SESSION_COOKIE_NAME}`);
+  if (!sessionId) {
+    throw redirect("/login");
+  }
+
+  // Fetch user data
+  const userSession = await db.session.findFirst({
+    where: { token: sessionId },
+    include: { Users: true },
+  });
+  if (!userSession) {
+    throw redirect("/login", {
+      headers: {
+        "Set-Cookie": await destroySession(session),
+      },
+    });
+  }
+
+  return userSession;
+};

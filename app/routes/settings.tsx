@@ -1,4 +1,4 @@
-import { LinksFunction, type MetaFunction } from "@remix-run/node";
+import { LinksFunction, LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
 import appscss from "~/styles/app.scss?url";
 import notesscss from "~/styles/notes.scss?url";
 import sidebarscss from "~/styles/sidebar.scss?url";
@@ -27,6 +27,7 @@ import chevronLeft from "~/assets/svg/chevron-left.svg";
 import fontType from "~/assets/svg/font-type.svg";
 import lock from "~/assets/svg/lock.svg";
 import logout from "~/assets/svg/logout.svg";
+import { authRoute } from "~/auth.server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -44,6 +45,10 @@ export const links: LinksFunction = () => [
   { rel: "stylesheet", href: toastscss },
   { rel: "stylesheet", href: settingsscss },
 ];
+
+export const loader = async (args: LoaderFunctionArgs) => {
+  return await authRoute(args);
+}
 
 export default function Index() {
   const navigation = useNavigation();

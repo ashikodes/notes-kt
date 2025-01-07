@@ -30,7 +30,12 @@ export default function PageHeader({ title, search, url }: PageHeaderProps) {
     navigation.location &&
     new URLSearchParams(navigation.location.search).has("search");
 
-  const isSettings = location.pathname.includes("settings");
+  const isSettings = location.pathname.includes("/settings");
+  const isTags = location.pathname.includes("/tags");
+  const isSettingsHome = location.pathname === "/settings";
+  const isTagsHome = location.pathname === "/tags";
+  const isSettingsDetail = isSettings && !isSettingsHome;
+  const isTagsDetail = isTags && !isTagsHome;
   const tagName = params.tagName;
   const noteId = params.noteId;
 
@@ -62,7 +67,7 @@ export default function PageHeader({ title, search, url }: PageHeaderProps) {
 
   return (
     <div
-      className={`page-header ${(noteId || isSettings) ? "hidden lg:flex" : "flex"}`}
+      className={`page-header ${(noteId || isSettingsDetail) ? "hidden lg:flex" : "flex"}`}
     >
       <h2 className="page-header__text">
         {search && <span className="block lg:hidden">Search</span>}
