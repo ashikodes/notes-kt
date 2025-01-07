@@ -48,7 +48,7 @@ export default function Sidebar() {
             <img src={chevronRight} className="chevron" alt="Chevron Right" />
           </NavLink>
           <div className="divider" />
-          {tags?.length && <span className="section-text">Tags</span>}
+          {!!tags?.length && <span className="section-text">Tags</span>}
           {tags?.map((tag) => (
             <NavLink
               key={tag.id}
