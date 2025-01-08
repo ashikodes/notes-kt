@@ -33,6 +33,10 @@ const toastConfig = {
         text: "Settings saved.",
         link: "",
     },
+    password: {
+        text: "Password changed.",
+        link: "",
+    },
 }
 
 export default function Toast() {

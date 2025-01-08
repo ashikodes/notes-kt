@@ -4,7 +4,7 @@ import {
   LoaderFunctionArgs,
   redirect,
 } from "@remix-run/node";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData } from "@remix-run/react";
 import { useContext, useEffect, useMemo, useState } from "react";
 import sun from "~/assets/svg/sun.svg";
 import dark from "~/assets/svg/dark.svg";

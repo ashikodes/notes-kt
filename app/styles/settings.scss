@@ -201,4 +201,95 @@
     line-height: 120%; /* 1.05rem */
     letter-spacing: -0.0125rem;
   }
+
+  .form-input {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-075, 0.375rem);
+    align-self: stretch;
+    position: relative;
+  }
+
+  label {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--spacing-100, 0.5rem);
+    align-self: stretch;
+    color: var(--colors-neutral-950, #0e121b);
+    font-feature-settings: "liga" off, "clig" off;
+
+    /* sans-serif/text-preset-4 */
+    font-family: Inter;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 120%; /* 1.05rem */
+    letter-spacing: -0.0125rem;
+  }
+
+  input {
+    display: flex;
+    padding: var(--spacing-150, 0.75rem) var(--spacing-200, 1rem);
+    align-items: center;
+    gap: var(--spacing-100, 0.5rem);
+    align-self: stretch;
+    border-radius: var(--corner-radius-8, 0.5rem);
+    border: 1px solid var(--colors-neutral-300, #cacfd8);
+    background: #fff;
+    box-shadow: 0px 1px 2px 0px rgba(10, 13, 20, 0.03);
+  }
+
+  .login-button {
+    display: flex;
+    height: 2.75rem;
+    padding: var(--spacing-150, 0.75rem) var(--spacing-200, 1rem);
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-100, 0.5rem);
+    align-self: stretch;
+    border-radius: var(--corner-radius-8, 0.5rem);
+    background: var(--colors-blue-500, #335cff);
+    color: #fff;
+    font-feature-settings: "liga" off, "clig" off;
+
+    /* sans-serif/text-preset-3 */
+    font-family: Inter;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 120%; /* 1.2rem */
+    letter-spacing: -0.01875rem;
+  }
+
+  input[type="password"] {
+    padding-right: 3.5rem;
+  }
+
+  .password-eye {
+    position: absolute;
+    right: 1rem;
+    top: 2.2rem;
+  }
+
+  .input-feedback.hint {
+    color: var(--colors-neutral-600, #525866);
+  }
+
+  .input-feedback.error {
+    color: var(--colors-red-500, #ff4d4f);
+  }
+
+  .input-feedback {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-100, 0.5rem);
+    align-self: stretch;
+    font-family: Inter;
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 140%; /* 1.05rem */
+  }
 }

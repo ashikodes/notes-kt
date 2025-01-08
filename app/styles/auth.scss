@@ -198,14 +198,20 @@
   .label-link {
     color: var(--colors-neutral-950, #0e121b);
     font-weight: 500;
+    cursor: pointer;
   }
+}
+.input-feedback.error {
+  color: var(--colors-red-500, #ff4d4f);
+}
+.input-feedback.hint {
+  color: var(--colors-neutral-600, #525866);
 }
 .input-feedback {
   display: flex;
   align-items: center;
   gap: var(--spacing-100, 0.5rem);
   align-self: stretch;
-  color: var(--colors-neutral-600, #525866);
   font-family: Inter;
   font-size: 0.75rem;
   font-style: normal;

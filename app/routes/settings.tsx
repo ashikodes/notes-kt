@@ -89,7 +89,7 @@ export default function Index() {
                   alt="Chevron Right"
                 />
               </NavLink>
-              <div className="menu-item">
+              <NavLink to="/settings/password" className="menu-item">
                 <img src={lock} alt="sun" />
                 <span className="menu-text">Change Password</span>
                 <img
@@ -97,7 +97,7 @@ export default function Index() {
                   className="chevron"
                   alt="Chevron Right"
                 />
-              </div>
+              </NavLink>
               <div className="divider" />
               <Form action="/logout">
                 <button type="submit" className="menu-item">

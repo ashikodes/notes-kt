@@ -119,7 +119,7 @@ export default function Register() {
                     <label htmlFor="email">Email Address</label>
                     <input type="email" id="email" name="email" required />
                     {actionData?.errors.email && (
-                        <div className="text-xs self-start mt-[-12px] text-red-400">{actionData?.errors.email}</div>
+                        <div className="input-feedback error">{actionData?.errors.email}</div>
                     )}
                 </div>
                 <div className="form-input">
@@ -129,9 +129,9 @@ export default function Register() {
                     <input type={showPassword ? 'text' : 'password'} id="password" name="password" required />
                     <img onClick={() => setShowPassword(!showPassword)} src={eye} alt="Eye" className="password-eye" />
                     {actionData?.errors.password ? (
-                        <div className="text-xs self-start mt-[-12px] text-red-400">{actionData?.errors.password}</div>
+                        <div className="input-feedback error">{actionData?.errors.password}</div>
                     ) : (
-                        <div className="input-feedback">
+                        <div className="input-feedback hint">
                             <img src={hint} alt="hint" />
                             <p>Password must be at least 8 characters long</p>
                         </div>
@@ -139,7 +139,7 @@ export default function Register() {
                 </div>
 
                 <button type="submit" className="login-button">Sign up</button>
-                {actionData?.errors.form && <div className="text-xs self-start mt-[-12px] text-red-400">{actionData?.errors.form}</div>}
+                {actionData?.errors.form && <div className="input-feedback error">{actionData?.errors.form}</div>}
             </Form>
             <div className="divider" />
             <p className="login-alt">Or log in with:</p>

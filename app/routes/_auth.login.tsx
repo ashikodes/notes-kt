@@ -125,7 +125,7 @@ export default function Login() {
                 <div className="form-input">
                     <label htmlFor="password">
                         Password
-                        <span className="label-link">Forgot?</span>
+                        <Link to="/forgot-password" className="label-link">Forgot?</Link>
                     </label>
                     <input
                         type={showPassword ? "text" : "password"}
@@ -154,7 +154,7 @@ export default function Login() {
                     Login
                 </button>
                 {actionData?.errors.form && (
-                    <div className="text-xs self-start mt-[-12px] text-red-400">
+                    <div className="input-feedback error">
                         {actionData?.errors.form}
                     </div>
                 )}

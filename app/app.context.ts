@@ -7,7 +7,7 @@ export const initialState = {
   search: "",
   userFont: "inter" as "inter" | "sans" | "monospace",
   userColor: "light" as "light" | "dark" | "system",
-  toast: "" as "saved" | "archived" | "deleted" | "updated" | "restored" | "tag_deleted" | "settings" | "",
+  toast: "" as "saved" | "archived" | "deleted" | "updated" | "restored" | "tag_deleted" | "settings" | "password" | "",
   modal: "" as "archive" | "delete" | "",
   note: {} as Prisma.NotesUncheckedCreateInput & {
     Tags: Prisma.TagCreateInput[];
