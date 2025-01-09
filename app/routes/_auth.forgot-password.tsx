@@ -66,14 +66,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const otp = randomBytes(3).toString("hex").toUpperCase();
     // store the OTP in the database in the user
     const token = encryptObject({ email, otp });
-    const expiry = Date.now() + 3600 * 1000; // 1 hour
-    const resetLink = `${process.env.APP_URL}/reset-password?token=${token}`;
-    const emailSent = await sendResetEmail({ to: email, resetLink });
     await db.users.update({
       where: { email },
-      data: { otp_code: otp, otp_expires: new Date(expiry).toISOString() },
+      data: { otp_code: otp, otp_expires: new Date(Date.now() + 3600 * 1000).toISOString() },
     });
-    return emailSent;
+    const resetLink = `${process.env.APP_URL}/reset-password?token=${token}`;
+    return await sendResetEmail({ to: email, resetLink });
   } catch (error) {
     return json({
       error: "unable to send reset link",
