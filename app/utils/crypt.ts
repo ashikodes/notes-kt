@@ -22,7 +22,6 @@ export type tokenObjectType = {
 export function encryptObject(obj: tokenObjectType): string {
   try {
     const iv = crypto.randomBytes(IV_LENGTH); // Initialization vector
-    console.log("iv", iv, ENCRYPTION_KEY, crypto.randomBytes(IV_LENGTH), crypto.randomBytes(32));
     const cipher = crypto.createCipheriv("aes-256-cbc", ENCRYPTION_KEY, iv);
   
     const encrypted = Buffer.concat([

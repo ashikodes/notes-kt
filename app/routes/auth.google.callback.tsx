@@ -10,7 +10,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     "google",
     request
   )) as Prisma.UsersCreateInput;
-  console.log({ user });
   if (!user) {
     return redirect("/login?error=google");
   }
