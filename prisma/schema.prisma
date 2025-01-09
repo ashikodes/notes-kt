@@ -26,6 +26,7 @@ model Users {
   email         String  @unique @db.VarChar
   password_hash String? @db.VarChar
   otp_code      String? @db.VarChar
+  otp_expires   DateTime? @db.Timestamp
   auth_type     String? @db.VarChar
   username      String? @db.VarChar
   Notes         Notes[]

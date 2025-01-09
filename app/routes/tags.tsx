@@ -11,8 +11,6 @@ import toastscss from "~/styles/toast.scss?url";
 import tagsscss from "~/styles/tags.scss?url";
 import { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import BottomNav from "~/components/BottomNav";
-import { AppStateContext, initialState } from "~/app.context";
-import { useState } from "react";
 import Toast from "~/components/Modal/Toast";
 import Modal from "~/components/Modal/Modal";
 import { authRoute } from "~/auth.server";
@@ -32,7 +30,6 @@ export const loader = async (args: LoaderFunctionArgs) => {
 }
 
 export default function Tags() {
-  const [appState, setAppState] = useState(initialState);
   const params = useParams();
   const location = useLocation();
   const tagName = params.tagName;
@@ -40,7 +37,6 @@ export default function Tags() {
   const url = location.pathname;
   const tagDetails = tagName && !noteId;
   return (
-    <AppStateContext.Provider value={{ appState, setAppState }}>
       <div className={`notes-container`}>
         <Sidebar />
         <div className="notes-container-content">
@@ -60,6 +56,5 @@ export default function Tags() {
         <Toast />
         <Modal />
       </div>
-    </AppStateContext.Provider>
   );
 }

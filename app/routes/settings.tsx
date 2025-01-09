@@ -1,4 +1,8 @@
-import { LinksFunction, LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
+import {
+  LinksFunction,
+  LoaderFunctionArgs,
+  type MetaFunction,
+} from "@remix-run/node";
 import appscss from "~/styles/app.scss?url";
 import notesscss from "~/styles/notes.scss?url";
 import sidebarscss from "~/styles/sidebar.scss?url";
@@ -17,8 +21,6 @@ import {
 import Sidebar from "~/components/Sidebar";
 import PageHeader from "~/components/PageHeader";
 import BottomNav from "~/components/BottomNav";
-import React, { useState } from "react";
-import { AppStateContext, initialState } from "~/app.context";
 import Modal from "~/components/Modal/Modal";
 import Toast from "~/components/Modal/Toast";
 import sun from "~/assets/svg/sun.svg";
@@ -48,78 +50,72 @@ export const links: LinksFunction = () => [
 
 export const loader = async (args: LoaderFunctionArgs) => {
   return await authRoute(args);
-}
+};
 
 export default function Index() {
   const navigation = useNavigation();
   const location = useLocation();
-  const [appState, setAppState] = useState(initialState);
 
   const url = location.pathname;
   const isSettingsHome = url === "/settings";
   const isLoading = navigation.state === "loading" ? "loading" : "";
 
   return (
-    <AppStateContext.Provider value={{ appState, setAppState }}>
-      <div className={`notes-container settings ${isLoading}`}>
-        <Sidebar />
-        <div className="notes-container-content">
-          <PageHeader title="Settings" search="" url={url} />
-          <div className="content-body">
-            <Link to="/settings" className={`${isSettingsHome ? "hidden" : "flex lg:hidden"} settings-nav`}>
-              <img src={chevronLeft} alt="Chevron Left" />
-              <span className="nav-title">Settings</span>
-            </Link>
-            <div className={`content-sidebar ${isSettingsHome ? "flex" : "hidden lg:flex"}`}>
-              <NavLink to="/settings/color" className="menu-item">
-                <img src={sun} alt="sun" />
-                <span className="menu-text">Color Theme</span>
+    <div className={`notes-container settings ${isLoading}`}>
+      <Sidebar />
+      <div className="notes-container-content">
+        <PageHeader title="Settings" search="" url={url} />
+        <div className="content-body">
+          <Link
+            to="/settings"
+            className={`${
+              isSettingsHome ? "hidden" : "flex lg:hidden"
+            } settings-nav`}
+          >
+            <img src={chevronLeft} alt="Chevron Left" />
+            <span className="nav-title">Settings</span>
+          </Link>
+          <div
+            className={`content-sidebar ${
+              isSettingsHome ? "flex" : "hidden lg:flex"
+            }`}
+          >
+            <NavLink to="/settings/color" className="menu-item">
+              <img src={sun} alt="sun" />
+              <span className="menu-text">Color Theme</span>
+              <img src={chevronRight} className="chevron" alt="Chevron Right" />
+            </NavLink>
+            <NavLink to="/settings/font" className="menu-item">
+              <img src={fontType} alt="sun" />
+              <span className="menu-text">Font Theme</span>
+              <img src={chevronRight} className="chevron" alt="Chevron Right" />
+            </NavLink>
+            <NavLink to="/settings/password" className="menu-item">
+              <img src={lock} alt="sun" />
+              <span className="menu-text">Change Password</span>
+              <img src={chevronRight} className="chevron" alt="Chevron Right" />
+            </NavLink>
+            <div className="divider" />
+            <Form action="/logout">
+              <button type="submit" className="menu-item">
+                <img src={logout} alt="sun" />
+                <span className="menu-text">Logout</span>
                 <img
                   src={chevronRight}
                   className="chevron"
                   alt="Chevron Right"
                 />
-              </NavLink>
-              <NavLink to="/settings/font" className="menu-item">
-                <img src={fontType} alt="sun" />
-                <span className="menu-text">Font Theme</span>
-                <img
-                  src={chevronRight}
-                  className="chevron"
-                  alt="Chevron Right"
-                />
-              </NavLink>
-              <NavLink to="/settings/password" className="menu-item">
-                <img src={lock} alt="sun" />
-                <span className="menu-text">Change Password</span>
-                <img
-                  src={chevronRight}
-                  className="chevron"
-                  alt="Chevron Right"
-                />
-              </NavLink>
-              <div className="divider" />
-              <Form action="/logout">
-                <button type="submit" className="menu-item">
-                  <img src={logout} alt="sun" />
-                  <span className="menu-text">Logout</span>
-                  <img
-                    src={chevronRight}
-                    className="chevron"
-                    alt="Chevron Right"
-                  />
-                </button>
-              </Form>
-            </div>
-            <div className="main-content">
-              <Outlet />
-            </div>
+              </button>
+            </Form>
+          </div>
+          <div className="main-content">
+            <Outlet />
           </div>
         </div>
-        <BottomNav />
-        <Modal />
-        <Toast />
       </div>
-    </AppStateContext.Provider>
+      <BottomNav />
+      <Modal />
+      <Toast />
+    </div>
   );
 }

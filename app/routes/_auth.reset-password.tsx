@@ -10,9 +10,12 @@ import {
   redirect,
   useActionData,
   useLoaderData,
+  useLocation,
+  useNavigate,
+  useSearchParams,
 } from "@remix-run/react";
 import bcrypt from "bcryptjs";
-import { randomBytes } from "crypto";
+import crypto from "crypto";
 import { db } from "~/db.server";
 import loginscss from "~/styles/login.scss?url";
 import feather from "~/assets/svg/feather.svg";
@@ -24,6 +27,7 @@ import { useContext, useEffect, useState } from "react";
 import { commitSession, destroySession, getSession } from "~/session.server";
 import { sendResetEmail } from "~/email.server";
 import { AppStateContext } from "~/app.context";
+import { decryptToObject } from "~/utils/crypt";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: loginscss },
@@ -42,15 +46,19 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  const url = new URL(request.url);
+  const token = url.searchParams.get("token");
   const formData = await request.formData();
-  // get email from url query params
-  const email = formData.get("email") as string;
-  const oldPassword = formData.get("old-password") as string;
-  const newPassword = formData.get("new-password") as string;
-  const confirmPassword = formData.get("confirm-password") as string;
-  const errors = { old: "", new: "", mismatch: "" };
+  const errors = { form: "", new: "", mismatch: "" };
+  if (!token) {
+    errors.form = "Invalid reset token";
+    return { success: false, errors, status: 400 };
+  }
 
   try {
+    const { email, otp } = decryptToObject(token as string);
+    const newPassword = formData.get("new-password") as string;
+    const confirmPassword = formData.get("confirm-password") as string;
     if (newPassword.length < 8) {
       errors.new = "Password must be at least 8 characters long";
       return { errors, status: 400 };
@@ -61,27 +69,18 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return { errors, status: 400 };
     }
 
-    // Check if the user's old password is correct
+    // Check if the user otp code is valid
     const user = await db.users.findFirst({
-      where: { email },
+      where: { email, otp_code: otp },
     });
     if (!user) {
-      const cookie = request.headers.get("Cookie");
-      const session = await getSession(cookie);
-      return redirect("/login", {
-        headers: {
-          "Set-Cookie": await destroySession(session),
-        },
-      });
+      errors.form = "Token is invalid";
+      return { success: false, errors, status: 400 };
     }
-
-    const isMatch = await bcrypt.compare(oldPassword, user.password_hash!);
-    if (user.password_hash && !isMatch) {
-      errors.old = "Old password is incorrect";
-      return { errors, status: 400 };
-    } else if (!user.password_hash) {
-      // user registered with google
-      errors.old = "Registered with auth provider, Set new password";
+    // check if token is expired
+    if (user.otp_expires && new Date(user.otp_expires).toISOString() < new Date().toISOString()) {
+      errors.form = "Token expired";
+      return { success: false, errors, status: 400 };
     }
 
     // Update the user's password
@@ -89,12 +88,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const password_hash = await bcrypt.hash(newPassword, saltRounds);
     await db.users.update({
       where: { email: user.email },
-      data: { password_hash, otp_code: "" },
+      data: { password_hash, otp_code: "", otp_expires: null },
     });
 
-    return { success: true, errors: { old: "", new: "", mismatch: "" } };
+    return { success: true, errors: { form: "", new: "", mismatch: "" } };
   } catch (error) {
-    return { errors, status: 400 };
+    errors.form = "Unable to reset password";
+    return { success: false, errors, status: 400 };
   }
 };
 
@@ -106,6 +106,7 @@ type showPasswordType = {
 
 export default function ResetPassword() {
   const { setAppState } = useContext(AppStateContext);
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<showPasswordType>(
     {} as showPasswordType
   );
@@ -113,7 +114,7 @@ export default function ResetPassword() {
   useEffect(() => {
     if (success) {
       setAppState((prev) => ({ ...prev, toast: "password" }));
-
+        navigate({ pathname: "/login" });
       setTimeout(() => {
         setAppState((prev) => ({ ...prev, toast: "" }));
       }, 3000);
@@ -209,6 +210,9 @@ export default function ResetPassword() {
         <button type="submit" className="login-button">
           Reset Link
         </button>
+        {errors?.form && (
+          <div className="input-feedback error">{errors?.form}</div>
+        )}
       </Form>
     </div>
   );

@@ -8,6 +8,8 @@ import {
 import type { LinksFunction } from "@remix-run/node";
 
 import "./tailwind.css";
+import { useState } from "react";
+import { AppStateContext, initialState } from "./app.context";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -23,7 +25,7 @@ export const links: LinksFunction = () => [
   {
     rel: "stylesheet",
     href: "https://fonts.googleapis.com/css2?family=Pacifico&display=swap",
-  }
+  },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -45,5 +47,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  const [appState, setAppState] = useState(initialState);
+  return (
+    <AppStateContext.Provider value={{ appState, setAppState }}>
+      <Outlet />
+    </AppStateContext.Provider>
+  );
 }

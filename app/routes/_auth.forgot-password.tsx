@@ -10,6 +10,7 @@ import {
   redirect,
   useActionData,
   useLoaderData,
+  useNavigation,
 } from "@remix-run/react";
 import bcrypt from "bcryptjs";
 import { randomBytes } from "crypto";
@@ -22,6 +23,7 @@ import google from "~/assets/svg/google.svg";
 import { useState } from "react";
 import { commitSession, getSession } from "~/session.server";
 import { sendResetEmail } from "~/email.server";
+import { encryptObject } from "~/utils/crypt";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: loginscss },
@@ -49,22 +51,29 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     if (!user) {
       return json({ error: "User not found", success: false, status: 400 });
     }
-    // if (user.otp_code) {
-    //   return json({
-    //     error: "An email has already been sent to you",
-    //     success: false,
-    //     status: 400,
-    //   });
-    // }
+    if (
+      user.otp_code &&
+      user.otp_expires &&
+      new Date(user.otp_expires).toISOString() > new Date().toISOString()
+    ) {
+      return json({
+        error: "An email has already been sent to you",
+        success: false,
+        status: 400,
+      });
+    }
     // generate an OTP 6 alphanumeric characters
     const otp = randomBytes(3).toString("hex").toUpperCase();
     // store the OTP in the database in the user
+    const token = encryptObject({ email, otp });
+    const expiry = Date.now() + 3600 * 1000; // 1 hour
+    const resetLink = `${process.env.APP_URL}/reset-password?token=${token}`;
+    const emailSent = await sendResetEmail({ to: email, resetLink });
     await db.users.update({
       where: { email },
-      data: { otp_code: otp },
+      data: { otp_code: otp, otp_expires: new Date(expiry).toISOString() },
     });
-    const resetLink = `${process.env.APP_URL}/reset-password?email=${email}&otp=${otp}`;
-    return await sendResetEmail({ to: email, resetLink });
+    return emailSent;
   } catch (error) {
     return json({
       error: "unable to send reset link",
@@ -75,8 +84,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export default function ForgotPassword() {
-  const [showSent, setShowSent] = useState(false);
   const { success, error } = useActionData<typeof action>() || {};
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
   return (
     <div className="login-container">
       <div className="notes-logo">
@@ -98,7 +108,11 @@ export default function ForgotPassword() {
             <input type="email" id="email" name="email" required />
           </div>
 
-          <button type="submit" className="login-button">
+          <button
+            disabled={isSubmitting}
+            type="submit"
+            className="login-button"
+          >
             Send Reset Link
           </button>
           {error && (
