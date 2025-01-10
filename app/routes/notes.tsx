@@ -109,6 +109,7 @@ export default function Index() {
   const isArchivedUrl = isArchivedHome || isArchivedNote;
   const isSearch = searchParams.has("search");
   const isLoading = navigation.state === "loading" ? "loading" : "";
+  const mobileHideList = !!noteId || isNewNote;
   let title = "All Notes";
   if (isArchivedUrl) title = "Archived Notes";
 
@@ -126,7 +127,7 @@ export default function Index() {
         <PageHeader title={title} search={search} url={url} />
         <div className="content-body">
           <div
-            className={`content-sidebar ${noteId ? "hidden lg:flex" : "flex"}`}
+            className={`content-sidebar ${mobileHideList ? "hidden lg:flex" : "flex"}`}
           >
             <Link to="/notes/new" className="create-note-btn">
               + Create New Note

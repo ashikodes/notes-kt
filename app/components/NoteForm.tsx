@@ -130,15 +130,6 @@ export default function NoteForm() {
           </div>
         </div>
         <div className="divider" />
-        <button
-          onClick={() => setPreview(!preview)}
-          type="button"
-          className="form-header-btn preview"
-        >
-          {markdown && !preview ? "Preview" : ""}
-          {preview && markdown ? "Edit" : ""}
-        </button>
-        <div className="divider preview" />
         {preview && (
           <div className="note-content">
             <ReactMarkdown>{markdown}</ReactMarkdown>
@@ -147,7 +138,7 @@ export default function NoteForm() {
         <textarea
           className={`note-content ${preview ? "hidden" : ""}`}
           name="content"
-          placeholder="Write your markdown here..."
+          placeholder="Start typing your note here…"
           defaultValue={details?.content ?? ""}
           onChange={(e) => setMarkdown(e.target.value)}
           required
@@ -164,14 +155,6 @@ export default function NoteForm() {
             >
               Cancel
             </Link>
-            <button
-              onClick={() => setPreview(!preview)}
-              type="button"
-              className="form-btn alternate"
-            >
-              {markdown && !preview ? "Preview" : ""}
-              {preview && markdown ? "Edit" : ""}
-            </button>
           </div>
         </div>
       </Form>
