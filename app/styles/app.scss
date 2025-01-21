@@ -1,3 +1,21 @@
+:root {
+  --font-inter: 'Inter';
+  --font-serif: sans-serif;
+  --font-mono:: monospace;
+}
+
+.font-inter {
+  font-family: var(--font-inter);
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
 body {
   margin: 0;
 }

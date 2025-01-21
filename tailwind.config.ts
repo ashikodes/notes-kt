@@ -8,6 +8,7 @@ export default {
         sans: [
           "Inter",
           "Pacifico",
+          "Monospace",
           "ui-sans-serif",
           "system-ui",
           "sans-serif",
