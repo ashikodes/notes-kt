@@ -1,3 +1,9 @@
+.app-dark {
+  .sidebar {
+    background: #0e121b;
+  }
+}
+
 .sidebar {
   display: flex;
   width: 100%;
@@ -7,6 +13,7 @@
   gap: var(--spacing-200, 1rem);
   flex-shrink: 0;
   border-right: 1px solid var(--colors-neutral-200, #e0e4ea);
+  background: #fff;
 
   @media screen and (min-width: 48rem) {
     height: 4.625rem;
@@ -16,7 +23,6 @@
     min-height: 100vh;
     height: auto;
     width: 17rem;
-    background-color: #fff;
     flex-direction: column;
     padding: var(--spacing-150, 0.75rem) var(--spacing-200, 1rem);
   }

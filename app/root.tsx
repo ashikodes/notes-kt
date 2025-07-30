@@ -9,14 +9,24 @@ import {
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 
 import "./tailwind.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AppStateContext, initialState } from "./app.context";
 import { userPrefs } from "./cookies.server";
 
-export const fontThemes = {
+const fontThemes = {
   inter: "font-inter",
   sans: "font-serif",
   monospace: "font-mono",
+};
+
+const colorThemes = {
+  light: "app-light",
+  dark: "app-dark",
+};
+
+type LoaderType = {
+  userFont: 'inter' | 'sans' | 'monospace';
+  userColor: 'light' | 'dark' | 'system';
 };
 
 export const links: LinksFunction = () => [
@@ -43,14 +53,21 @@ export const links: LinksFunction = () => [
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const cookieHeader = request.headers.get("Cookie");
   const cookie = (await userPrefs.parse(cookieHeader)) || {};
-  return { userFont: cookie.userFont };
+  return { userFont: cookie.userFont, userColor: cookie.userColor };
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const loaderData = useLoaderData<typeof loader>() as { userFont: 'inter' | 'sans' | 'monospace' };
-  const { userFont = 'inter' } = loaderData;
+  const [appColor, setAppColor] = useState('light');
+  const loaderData = useLoaderData<typeof loader>() as LoaderType;
+  let { userFont = 'inter', userColor = 'light' } = loaderData || {};
+  useEffect(() => {
+    if (userColor === 'system') {
+      const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      userColor = systemDark ? 'dark' : 'light';
+    }
+  }, [userColor]);
   return (
-    <html lang="en" className={fontThemes[userFont]}>
+    <html lang="en" className={`${fontThemes[userFont]} ${appColor}`}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
