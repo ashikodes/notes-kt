@@ -1,0 +1,13 @@
+{
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "build": {
+    "env": {
+      "PRISMA_GENERATE": "true"
+    }
+  }
+}
