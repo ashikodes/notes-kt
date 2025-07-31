@@ -1,13 +1,8 @@
 {
-  "builds": [
-    {
-      "src": "server.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "build": {
-    "env": {
-      "PRISMA_GENERATE": "true"
-    }
-  }
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "cleanUrls": true,
+  "framework": "remix",
+  "outputDirectory": "build",
+  "devCommand": "remix vite:dev"
 }
