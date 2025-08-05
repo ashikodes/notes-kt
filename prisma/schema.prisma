@@ -1,11 +1,13 @@
 generator client {
   provider = "prisma-client-js"
   log = ["query", "info", "warn"]
+  previewFeatures = ["multischema"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas  = ["prisma"]
 }
 
 model Notes {
@@ -19,6 +21,7 @@ model Notes {
   updated_at DateTime @updatedAt @db.Timestamp
   Users      Users?   @relation(fields: [user_id], references: [id], onUpdate: NoAction, map: "notes_users_fk")
   Tags       Tag[]
+  @@schema("prisma")
 }
 
 model Users {
@@ -31,12 +34,14 @@ model Users {
   username      String? @db.VarChar
   Notes         Notes[]
   Session       Session[]
+  @@schema("prisma")
 }
 
 model Tag {
   id       String  @id(map: "tag_pk") @map("_id") @db.VarChar
   name     String  @unique @db.VarChar
-  Notes    Notes[] 
+  Notes    Notes[]
+  @@schema("prisma")
 }
 
 model Session {
@@ -47,5 +52,6 @@ model Session {
   Users       Users?   @relation(fields: [user_id], references: [id])
   created_at   DateTime @default(now())
   expires_at   DateTime
+  @@schema("prisma")
 }
 
